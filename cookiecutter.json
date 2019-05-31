@@ -1,0 +1,29 @@
+{
+  "service_name": "my-service-name",
+  "service_description": "Service Description",
+  "function_name": "MyFunctionName",
+  "function_description": "Function Description",
+  "license": [
+    "BSD-2-Clause",
+    "MIT",
+    "MIT-0",
+    "other"
+  ],
+  "copyright_holder": "ServerlessOps, LLC",
+  "author_name": "",
+  "author_email": "",
+  "year": "{% now 'utc', '%Y' %}",
+  "event_source": [
+    "apigateway",
+    "sns",
+    "sqs",
+    "sns"
+  ],
+  "enable_xray": [
+    "no",
+    "yes"
+  ],
+  "_extensions": [
+    "jinja2_time.TimeExtension"
+  ]
+}

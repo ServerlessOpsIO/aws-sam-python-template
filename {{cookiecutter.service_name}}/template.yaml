@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  {{cookiecutter.service_name}}
+
+  {{cookiecutter.service_description}}
+
+
+Globals:
+  Function:
+    Timeout: 3
+{%- if cookiecutter.enable_xray == "y" %}
+    Tracing: Active
+{%- endif -%}
+
+
+Resources:
+  {{cookiecutter.function_name}}:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/{{cookiecutter.function_name}}
+      Handler: handler
+      Runtime: python3.7
+      Events:
+{%- if cookiecutter.event_source == "apigateway" %}
+        ApigGet:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+{%- endif -%}
+
+
+Outputs:
+{%- if cookiecutter.event_source == "apigateway" %}
+  {{cookiecutter.service_name}}ApiRoot:
+    Description: "API Gateway endpoint URL for function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+{%- endif -%}
+
+  {{cookiecutter.function_name}}Arn:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunction.Arn
+
