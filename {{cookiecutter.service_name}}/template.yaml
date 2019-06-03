@@ -5,10 +5,25 @@ Description: >
 
   {{cookiecutter.service_description}}
 
+Parameters:
+  LogLevel:
+    Type: String,
+    Default: 'INFO'
+    AllowedValues:
+      - 'DEBUG'
+      - 'INFO'
+      - 'WARNING'
+      - 'ERROR'
+      - 'CRITICAL'
+
 
 Globals:
   Function:
     Timeout: 3
+    Environment:
+      Variables:
+        LOG_LEVEL:
+          Ref: LogLevel
 {%- if cookiecutter.enable_xray == "y" %}
     Tracing: Active
 {%- endif -%}
