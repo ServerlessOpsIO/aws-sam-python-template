@@ -101,20 +101,19 @@ Resources:
 {%- endif %}
 {%- endif %}
 
-
-    {{cookiecutter.function_name}}Policy:
-      Type: "AWS::IAM::Policy"
-      Properties:
-        PolicyName: "root"
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Action: "ssm:GetParameters"
-              Resource: "*"
-        Roles:
-          # This role is created implicitly by SAM.
-          - Ref: {{cookiecutter.function_name}}Role
+  {{cookiecutter.function_name}}Policy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "root"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "ssm:GetParameters"
+            Resource: "*"
+      Roles:
+        # This role is created implicitly by SAM.
+        - Ref: {{cookiecutter.function_name}}Role
 
 
 Outputs:
