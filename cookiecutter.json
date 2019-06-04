@@ -25,6 +25,14 @@
     "sqs",
     "sns"
   ],
+  "event_destination": [
+    "other",
+    "dynamodb",
+    "kinesis",
+    "s3",
+    "sns",
+    "sqs"
+  ],
   "enable_xray": [
     "no",
     "yes"

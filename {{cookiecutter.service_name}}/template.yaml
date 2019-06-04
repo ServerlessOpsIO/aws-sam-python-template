@@ -8,6 +8,7 @@ Description: >
 Parameters:
   LogLevel:
     Type: String
+    Description: "Log level for functions; used internally in code."
     Default: 'INFO'
     AllowedValues:
       - 'DEBUG'
@@ -15,6 +16,136 @@ Parameters:
       - 'WARNING'
       - 'ERROR'
       - 'CRITICAL'
+
+{% if cookiecutter.event_source != "other" %}
+{%- elif cookiecutter.event_source == "cloudwatch-logs" %}
+  EventCloudwatchLogGroupName:
+    Type: String
+    Description: "Name of triggering log group"
+    #Default: <<LOGGROUP_NAME>>
+
+  # NOTE: A filterPattern is optional
+  #EventCloudwatchLogGroupFilterPattern:
+  #  Type: String
+  #  Default: <<FILTER_PATTERN>>
+{%- elif cookiecutter.event_source == "dynamodb" %}
+  EventDynamoDBStreamArn:
+    Type: String
+    Description: "ARN of stream"
+    #Default: <<required: STREAM_ARN>>
+
+  EventDynamoDBStreamStartingPosition:
+    Type: String
+    Description: "Stream starting position for function"
+    AllowedValues:
+      - 'LATEST'
+      - 'TRIM_HORIZON'
+    Default: 'LATEST'
+
+  EventDynamoDBStreamBatchSize:
+    Type: String
+    Description: "Size of event batch"
+    Default: 100
+
+  # FIXME: Need a Condition block for this.
+  EventDynamoDBStreamEnabled:
+    Type: String
+    Description: "If processing is enabled"
+    AllowedValues:
+      - True
+      - False
+    Default: True
+
+{%- elif cookiecutter.event_source == "kinesis" %}
+  EventKinesisStreamArn:
+    Type: String
+    Description: "ARN of stream"
+    #Default: <<required: STREAM_ARN>>
+
+  EventKinesisStreamStartingPosition:
+    Type: String
+    Description: "Stream starting position for function"
+    AllowedValues:
+      - 'LATEST'
+      - 'TRIM_HORIZON'
+    Default: 'LATEST'
+
+  EventKinesisStreamBatchSize:
+    Type: String
+    Description: "Size of event batch"
+    Default: 100
+
+  # FIXME: Need a Condition block for this.
+  EventKinesisStreamEnabled:
+    Type: String
+    Description: "If processing is enabled"
+    AllowedValues:
+      - True
+      - False
+    Default: True
+
+{%- elif cookiecutter.event_source == "s3" %}
+  EventS3Bucket:
+    Type: String
+    Description: "S3 bucket name"
+    #Default: <<required: BUCKET_NAME>>
+
+  EventS3EventsList:
+    Type: List
+    Description: "List of events to trigger on"
+    AllowedValues:
+      - s3:ObjectCreated:*
+      - s3:ObjectCreated:Put
+      - s3:ObjectCreated:Post
+      - s3:ObjectCreated:Copy
+      - s3:ObjectCreated:CompleteMultipartUpload
+      - s3:ObjectRemoved:*
+      - s3:ObjectRemoved:Delete
+      - s3:ObjectRemoved:DeleteMarkerCreated
+      - s3:ObjectRestore:Post
+      - s3:ObjectRestore:Completed
+      - s3:ReducedRedundancyLostObject
+    #Default:
+    #  - <<required: EVENT>>
+
+  #EventS3FilterRuleList:
+  #  Type: List
+  #  Description: "List of event filter rules."
+  #  Default:
+  #    - <<FILTER_RULE>>
+{%- elif cookiecutter.event_source == "schedule" %}
+  EventSchedule:
+    Type: String
+    Description: "event schedule"
+    #Default: <<required: SCHEDULE>>
+{%- elif cookiecutter.event_source == "sns" %}
+  EventSnsTopicArn:
+    Type: String
+    Description: "SNS Topic Arn"
+    #Default: <<required: SNS_TOPIC_ARN>>
+
+{%- elif cookiecutter.event_source == "sqs" %}
+  EventSqsQueueArn:
+    Type: String
+    Description: "ARN of stream"
+    #Default: <<required: STREAM_ARN>>
+
+  EventSqsQueueBatchSize:
+    Type: String
+    Description: "Size of event batch"
+    Default: 10
+
+  # FIXME: Need a Condition block for this.
+  EventSqsQueueEnabled:
+    Type: String
+    Description: "If processing is enabled"
+    AllowedValues:
+      - True
+      - False
+    Default: True
+
+{%- endif %}
+{%- endif %}
 
 
 Globals:
@@ -44,62 +175,80 @@ Resources:
           Properties:
             RestApiId:
               Ref: RestApi
-            Path: <<PATH>>
-            Method: <<METHOD>>
+            #Path: <<required: PATH>>
+            #Method: <<required: METHOD>>
 {%- elif cookiecutter.event_source == "cloudwatch-event" %}
         CloudWatchEvent:
-          Type:
+          Type: CloudWatchEvent
           Properties:
             Pattern: <<PATTERN_OBJECT>>
 {%- elif cookiecutter.event_source == "cloudwatch-logs" %}
         CloudWatchLogs:
-          Type:
+          Type: CloudWatchLogs
           Properties:
-            LogGroupName: <<GROUP_NAME>>
-            FilterPattern: <<FILTER_PATTERN>>
+            LogGroupName:
+              Ref: EventCloudwatchLogGroupName
+            #FilterPattern:
+            #  Ref: EventCloudwatchLogGroupFilterPattern
 {%- elif cookiecutter.event_source == "dynamodb" %}
         DynamoDB:
           Type: DynamoDB
           Properties:
-            Stream: <<STREAM_ARN>>
-            StartingPosition: <<TRIM_HORIZON | LATEST>>
-            BatchSize: <<BATCH_SIZE>>
-            Enabled: <<True | False>>
+            Stream:
+              Ref: EventDynamoDBStreamArn
+            StartingPosition:
+              Ref: EventDynamoDBStreamStartingPosition
+            BatchSize:
+              Ref: EventDynamoDBStreamBatchSize
+            Enabled:
+              Ref: EventDynamoDBStreamEnabled
 {%- elif cookiecutter.event_source == "kinesis" %}
         Kinesis:
           Type: Kinesis
           Properties:
-            Stream: <<STREAM_ARN>>
-            StartingPosition: <<TRIM_HORIZON | LATEST>>
-            BatchSize: <<BATCH_SIZE>>
-            Enabled: <<True | False>>
+            Stream:
+              Ref: EventKinesisStreamArn
+            StartingPosition:
+              Ref: EventKinesisStreamStartingPosition
+            BatchSize:
+              Ref: EventKinesisStreamBatchSize
+            Enabled:
+              Ref: EventKinesisStreamEnabled
 {%- elif cookiecutter.event_source == "s3" %}
         S3:
           Type: S3
           Properties:
-            Bucket: <<BUCKET_NAME>>
+            Bucket:
+              Ref: EventS3Bucket
             Events:
-              - <<EVENT_1>>
-            Filter: <<NOTIFICATION_FILTER>>
+              Ref: EventS3EventsList
+            #Filter:
+            #  S3Key:
+            #    Ref: EventS3FilterRuleList
 {%- elif cookiecutter.event_source == "schedule" %}
         Schedule:
           Type: Schedule
           Properties:
-            Schedule: <<SCHEDULE>>
+            Schedule:
+              Ref: EventSchedule
 {%- elif cookiecutter.event_source == "sns" %}
         SNS:
           Type: SNS
           Properties:
-            Topic: <<TOPIC_ARN>>
-            FilterPolicy:
-              <<FILTER_POLICY>>
+            Topic:
+              Ref: EventSnsTopicArn
+            #FilterPolicy:
+            #  <<FILTER_POLICY>>
 {%- elif cookiecutter.event_source == "sqs" %}
         SQS:
           Type: SQS
           Properties:
-            Queue: <<QUEUE_ARN>>
-            BatchSize: <<BATCH_SIZE>>
-            Enabled: <<True|False>>
+            Queue:
+              Ref: EventSqsQueueArn
+            BatchSize:
+              Ref: EventSqsQueueBatchSize
+            Enabled:
+              Ref: EventSqsQueueEnabled
 {%- endif %}
 {%- endif %}
 
