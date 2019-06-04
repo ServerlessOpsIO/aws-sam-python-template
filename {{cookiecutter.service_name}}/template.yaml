@@ -253,11 +253,11 @@ Resources:
 {%- endif %}
 
 {% if cookiecutter.event_source == "apigateway" %}
-    RestApi:
-      Type: AWS::Serverless::Api
-      Properties:
-        StageName: 'live'
-        #DefinitionUri: swagger.yml
+  RestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: 'live'
+      #DefinitionUri: swagger.yml
 {%- endif %}
 
   {{cookiecutter.function_name}}Policy:
