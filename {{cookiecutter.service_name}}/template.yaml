@@ -18,6 +18,7 @@ Parameters:
       - 'CRITICAL'
 
 {% if cookiecutter.event_source != "other" %}
+  ## Event source configuration
 {%- if cookiecutter.event_source == "cloudwatch-logs" %}
   EventCloudwatchLogGroupName:
     Type: String
@@ -143,8 +144,42 @@ Parameters:
       - True
       - False
     Default: True
-
+{%- endif -%}
 {%- endif %}
+
+{%- if cookiecutter.event_destination != "other" %}
+  ## Event destination configurtation
+{%- if cookiecutter.event_destination == "dynamodb" %}
+  DdbHashKeyName:
+    Type: String
+    Description: "DDB table hash key name"
+    #Default: <<required: HASH_KEY_NAME>>
+
+  DdbHashKeyType:
+    Type: String
+    Description: "DDB table hash key name"
+    AllowedValues:
+      - "S"
+      - "N"
+      - "B"
+    #Default: <<required: HASH_KEY_TYPE>>
+
+  # Optional range key information
+  #DdbRangeKeyName:
+  #  Type: String
+  #  Description: "DDB table hash key name"
+  #  Default: <<required: RANGE_KEY_NAME>>
+
+  #DdbRangeKeyType:
+  #  Type: String
+  #  Description: "DDB table range key type"
+  #  AllowedValues:
+  #    - "S"
+  #    - "N"
+  #    - "B"
+  #  Default: <<required: RANGE_KEY_TYPE>>
+
+{%- endif -%}
 {%- endif %}
 
 
@@ -270,9 +305,51 @@ Resources:
           - Effect: "Allow"
             Action: "ssm:GetParameters"
             Resource: "*"
+{%- if cookiecutter.event_destination != "other" %}
+{%- if cookiecutter.event_destination == "dynamodb" %}
+          - Effect: "Allow"
+            Action:
+              - "dynanodb:<<DDB_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - DynamoDBTable
+                - Arn
+{%- endif %}
+{%- endif %}
       Roles:
         # This role is created implicitly by SAM.
         - Ref: {{cookiecutter.function_name}}Role
+
+
+{% if cookiecutter.event_destination != "other" %}
+{%- if cookiecutter.event_destination == "dynamodb" %}
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName:
+            Ref: DdbHashKeyName
+          AttributeType:
+            Ref: DdbHashKeyType
+        #- AttributeName:
+        #    Ref: DdbRangeKeyName
+        #  AttributeType:
+        #    Ref: DdbRangeKeyType
+      KeySchema:
+        - AttributeName:
+            Ref: DdbHashKeyName
+          KeyType: "HASH"
+        #- AttributeName:
+        #    Ref: DdbRangeKeyName
+        #  KeyType: "RANGE"
+      BillingMode: "PAY_PER_REQUEST"
+
+{%- elif cookiecutter.event_destination == "kinesis" %}
+{%- elif cookiecutter.event_destination == "s3" %}
+{%- elif cookiecutter.event_destination == "sns" %}
+{%- elif cookiecutter.event_destination == "sqs" %}
+{%- endif %}
+{%- endif %}
 
 
 Outputs:
