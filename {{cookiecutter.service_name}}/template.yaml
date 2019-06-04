@@ -36,14 +36,85 @@ Resources:
       CodeUri: src/handlers/{{cookiecutter.function_name}}
       Handler: function.handler
       Runtime: python3.7
+{%- if cookiecutter.event_source != "other" %}
       Events:
 {%- if cookiecutter.event_source == "apigateway" %}
         Apig:
           Type: Api
           Properties:
-            Path: /
-            Method: get
-{%- endif -%}
+            Path: <<PATH>>
+            Method: <<METHOD>>
+{%- elif cookiecutter.event_source == "cloudwatch-event" %}
+        CloudWatchEvent:
+          Type:
+          Properties:
+            Pattern: <<PATTERN_OBJECT>>
+{%- elif cookiecutter.event_source == "cloudwatch-logs" %}
+        CloudWatchLogs:
+          Type:
+          Properties:
+            LogGroupName: <<GROUP_NAME>>
+            FilterPattern: <<FILTER_PATTERN>>
+{%- elif cookiecutter.event_source == "dynamodb" %}
+        DynamoDB:
+          Type: DynamoDB
+          Properties:
+            Stream: <<STREAM_ARN>>
+            StartingPosition: <<TRIM_HORIZON | LATEST>>
+            BatchSize: <<BATCH_SIZE>>
+            Enabled: <<True | False>>
+{%- elif cookiecutter.event_source == "kinesis" %}
+        Kinesis:
+          Type: Kinesis
+          Properties:
+            Stream: <<STREAM_ARN>>
+            StartingPosition: <<TRIM_HORIZON | LATEST>>
+            BatchSize: <<BATCH_SIZE>>
+            Enabled: <<True | False>>
+{%- elif cookiecutter.event_source == "s3" %}
+        S3:
+          Type: S3
+          Properties:
+            Bucket: <<BUCKET_NAME>>
+            Events:
+              - <<EVENT_1>>
+            Filter: <<NOTIFICATION_FILTER>>
+{%- elif cookiecutter.event_source == "schedule" %}
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: <<SCHEDULE>>
+{%- elif cookiecutter.event_source == "sns" %}
+        SNS:
+          Type: SNS
+          Properties:
+            Topic: <<TOPIC_ARN>>
+            FilterPolicy:
+              <<FILTER_POLICY>>
+{%- elif cookiecutter.event_source == "sqs" %}
+        SQS:
+          Type: SQS
+          Properties:
+            Queue: <<QUEUE_ARN>>
+            BatchSize: <<BATCH_SIZE>>
+            Enabled: <<True|False>>
+{%- endif %}
+{%- endif %}
+
+
+    {{cookiecutter.function_name}}Policy:
+      Type: "AWS::IAM::Policy"
+      Properties:
+        PolicyName: "root"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Action: "ssm:GetParameters"
+              Resource: "*"
+        Roles:
+          # This role is created implicitly by SAM.
+          - Ref: {{cookiecutter.function_name}}Role
 
 
 Outputs:

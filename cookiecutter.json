@@ -14,8 +14,14 @@
   "author_email": "",
   "year": "{% now 'utc', '%Y' %}",
   "event_source": [
+    "other",
     "apigateway",
-    "sns",
+    "cloudwatch-event",
+    "cloudwatch-logs",
+    "dynamodb",
+    "kinesis",
+    "s3",
+    "schedule",
     "sqs",
     "sns"
   ],
