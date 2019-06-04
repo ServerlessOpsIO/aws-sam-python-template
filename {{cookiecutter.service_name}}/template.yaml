@@ -18,7 +18,7 @@ Parameters:
       - 'CRITICAL'
 
 {% if cookiecutter.event_source != "other" %}
-{%- elif cookiecutter.event_source == "cloudwatch-logs" %}
+{%- if cookiecutter.event_source == "cloudwatch-logs" %}
   EventCloudwatchLogGroupName:
     Type: String
     Description: "Name of triggering log group"
