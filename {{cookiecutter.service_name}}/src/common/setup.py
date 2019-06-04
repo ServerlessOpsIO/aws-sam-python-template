@@ -5,10 +5,8 @@ import re
 import os
 from setuptools import setup, find_packages
 
-module_name = "{{cookiecutter.service_name}}"
-
 setup(
-    name='{{cookiecutter.service_name}}-common',
+    name='common',
     version='0.0.1',
     description='{{cookiecutter.service_name}} Service Common Code',
     author='{{cookiecutter.author_name}}',
