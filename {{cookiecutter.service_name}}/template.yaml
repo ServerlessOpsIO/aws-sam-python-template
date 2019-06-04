@@ -34,7 +34,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/handlers/{{cookiecutter.function_name}}
-      Handler: handler
+      Handler: function.handler
       Runtime: python3.7
       Events:
 {%- if cookiecutter.event_source == "apigateway" %}
