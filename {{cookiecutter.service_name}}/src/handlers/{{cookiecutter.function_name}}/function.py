@@ -14,7 +14,7 @@ if "AWS_SAM_LOCAL" not in os.environ:
 
 
 # This path reflects the packaged path
-from  . import common
+import common
 
 log_level = os.environ.get('LOG_LEVEL', 'INFO')
 logging.root.setLevel(logging.getLevelName(log_level))  # type: ignore
