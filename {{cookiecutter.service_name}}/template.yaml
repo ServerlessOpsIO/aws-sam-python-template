@@ -42,6 +42,8 @@ Resources:
         Apig:
           Type: Api
           Properties:
+            RestApiId:
+              Ref: RestApi
             Path: <<PATH>>
             Method: <<METHOD>>
 {%- elif cookiecutter.event_source == "cloudwatch-event" %}
@@ -101,6 +103,14 @@ Resources:
 {%- endif %}
 {%- endif %}
 
+{% if cookiecutter.event_source == "apigateway" %}
+    RestApi:
+      Type: AWS::Serverless::Api
+      Properties:
+        StageName: 'live'
+        #DefinitionUri: swagger.yml
+{%- endif %}
+
   {{cookiecutter.function_name}}Policy:
     Type: "AWS::IAM::Policy"
     Properties:
@@ -119,10 +129,10 @@ Resources:
 Outputs:
 {%- if cookiecutter.event_source == "apigateway" %}
   # FIXME: Fix API root
-  ApiRoot:
+  RestApiRoot:
     Description: "API Gateway endpoint URL for function"
     Value:
-      Fn::Sub: "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 {%- endif %}
 
   {{cookiecutter.function_name}}Arn:
