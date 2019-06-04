@@ -35,7 +35,7 @@ FIXME: Update structure
 **Invoking function locally using a local sample payload**
 
 ```bash
-sam local invoke HelloWorldFunction --event event.json
+sam local invoke {{cookiecutter.function_name}} --event events/{{cookiecutter.function_name}}-source-{{cookiecutter.event_source}}.json
 ```
 
 **Invoking function locally through local API Gateway**
@@ -90,7 +90,7 @@ Next, the following command will create a Cloudformation Stack and deploy your S
 ```bash
 sam deploy \
     --template-file packaged.yaml \
-    --stack-name aws-sam-tmpl-py37 \
+    --stack-name {{cookiecutter.service_name}} \
     --capabilities CAPABILITY_IAM
 ```
 
@@ -100,7 +100,7 @@ After deployment is complete you can run the following command to retrieve the A
 
 ```bash
 aws cloudformation describe-stacks \
-    --stack-name aws-sam-tmpl-py37 \
+    --stack-name sam-py37 \
     --query 'Stacks[].Outputs[?OutputKey==`HelloWorldApi`]' \
     --output table
 ```
@@ -112,7 +112,7 @@ To simplify troubleshooting, SAM CLI has a command called sam logs. sam logs let
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam logs -n HelloWorldFunction --stack-name aws-sam-tmpl-py37 --tail
+sam logs -n {{cookiecutter.function_name}} --stack-name {{cookiecutter.service_name}} --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -132,7 +132,7 @@ python -m pytest tests/ -v
 In order to delete our Serverless Application recently deployed you can use the following AWS CLI Command:
 
 ```bash
-aws cloudformation delete-stack --stack-name aws-sam-tmpl-py37
+aws cloudformation delete-stack --stack-name {{cookiecutter.service_name}}
 ```
 
 ## Bringing to the next level
@@ -143,7 +143,7 @@ Here are a few things you can try to get more acquainted with building serverles
 
 * Uncomment lines on `app.py`
 * Build the project with ``sam build --use-container``
-* Invoke with ``sam local invoke HelloWorldFunction --event event.json``
+* Invoke with ``sam local invoke {{cookiecutter.function_name}} --event events/{{cookiecutter.function_name}}-source-{{cookiecutter.event_source}}.json``
 * Update tests
 
 ### Create an additional API resource
@@ -181,10 +181,10 @@ All commands used throughout this document
 
 ```bash
 # Generate event.json via generate-event command
-sam local generate-event apigateway aws-proxy > event.json
+sam local generate-event apigateway aws-proxy > events/{{cookiecutter.function_name}}-source-{{cookiecutter.event_source}}.json
 
 # Invoke function locally with event.json as an input
-sam local invoke HelloWorldFunction --event event.json
+sam local invoke {{cookiecutter.function_name}} --event events/{{cookiecutter.function_name}}-source-{{cookiecutter.event_source}}.json
 
 # Run API Gateway locally
 sam local start-api
@@ -200,16 +200,16 @@ sam package \
 # Deploy SAM template as a CloudFormation stack
 sam deploy \
     --template-file packaged.yaml \
-    --stack-name aws-sam-tmpl-py37 \
+    --stack-name {{cookiecutter.service_name}} \
     --capabilities CAPABILITY_IAM
 
 # Describe Output section of CloudFormation stack previously created
 aws cloudformation describe-stacks \
-    --stack-name aws-sam-tmpl-py37 \
+    --stack-name {{cookiecutter.service_name}} \
     --query 'Stacks[].Outputs[?OutputKey==`HelloWorldApi`]' \
     --output table
 
 # Tail Lambda function Logs using Logical name defined in SAM Template
-sam logs -n HelloWorldFunction --stack-name aws-sam-tmpl-py37 --tail
+sam logs -n {{cookiecutter.function_name}} --stack-name {{cookiecutter.service_name}} --tail
 ```
 
