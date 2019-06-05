@@ -179,6 +179,17 @@ Parameters:
   #    - "B"
   #  Default: <<required: RANGE_KEY_TYPE>>
 
+{%- elif cookiecutter.event_destination == "kinesis" %}
+  KinesisStreamRetentionHours:
+    Type: Number
+    Description: "Stream retention period in hours"
+    Default: 24
+
+  KinesisStreamShardCount:
+    Type: Number
+    Description: "Stream retention period in hours"
+    #Default: <<required: SHARD_COUNT>>
+
 {%- endif -%}
 {%- endif %}
 
@@ -314,6 +325,16 @@ Resources:
               Fn::GetAtt:
                 - DynamoDBTable
                 - Arn
+
+{%- elif cookiecutter.event_destination == "kinesis" %}
+          - Effect: "Allow"
+            Action:
+              - "kinesis:<<KINESIS_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - KinesisStream
+                - Arn
+
 {%- endif %}
 {%- endif %}
       Roles:
@@ -345,6 +366,12 @@ Resources:
       BillingMode: "PAY_PER_REQUEST"
 
 {%- elif cookiecutter.event_destination == "kinesis" %}
+  KinesisStream:
+    RetentionPeriodHours:
+      Ref: KinesisStreamRetentionHours
+    ShardCount:
+      Ref: KinesisStreamShardCount
+
 {%- elif cookiecutter.event_destination == "s3" %}
 {%- elif cookiecutter.event_destination == "sns" %}
 {%- elif cookiecutter.event_destination == "sqs" %}
