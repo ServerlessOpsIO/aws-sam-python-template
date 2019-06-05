@@ -236,10 +236,14 @@ Parameters:
     Description: "Sqs queue delayed delivery in seconds"
     Default: 0
 
-  SqsQueueFifoQueue:
-    Type: String
-    Description: "Sqs queue FIFO queue"
-    Default: 'false'
+  # FIXME: Not sure why this is failing
+  #SqsQueueFifoQueue:
+  #  Type: String
+  #  Description: "SQS queue FIFO queue"
+  #  AllowedValues:
+  #    - True
+  #    - False
+  #  Default: False
 
   SqsQueueMessageRetentionPeriod:
     Type: Number
@@ -509,8 +513,9 @@ Resources:
     Properties:
       DelaySeconds:
         Ref: SqsQueueDelaySeconds
-      FifoQueue:
-        Ref: SqsQueueFifoQueue
+      # FIXME: Not working
+      #FifoQueue:
+      #  Ref: SqsQueueFifoQueue
       MessageRetentionPeriod:
         Ref: SqsQueueMessageRetentionPeriod
       ReceiveMessageWaitTimeSeconds:
