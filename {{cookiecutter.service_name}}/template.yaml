@@ -213,6 +213,32 @@ Parameters:
     Description: 'Bucket versioning status'
     Default: 'Suspended'
 
+{%- elif cookiecutter.event_destination == "sqs" %}
+  SqsQueueDelaySeconds:
+    Type: Number
+    Description: "Sqs queue delayed delivery in seconds"
+    Default: 0
+
+  SqsQueueFifoQueue:
+    Type: String
+    Description: "Sqs queue FIFO queue"
+    Default: 'false'
+
+  SqsQueueMessageRetentionPeriod:
+    Type: Number
+    Description: "Sqs queue message retention period"
+    Default: 345600
+
+  SqsQueueReceiveMessageWaitTimeSeconds:
+    Type: Number
+    Description: "Sqs queue polling length in seconds"
+    Default: 0
+
+  SqsQueueVisibilityTimeout:
+    Type: Number
+    Description: "Sqs queue visibility timeout in seconds"
+    Default: 30
+
 {%- endif -%}
 {%- endif %}
 
@@ -370,6 +396,14 @@ Resources:
               - "sns:<<SNS_ACTION>>"
             Resource:
               Ref: SnsTopic
+{%- elif cookiecutter.event_destination == "sqs" %}
+          - Effect: "Allow"
+            Action:
+              - "sqs:<<SQS_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - SqsQueue
+                - Arn
 {%- endif %}
 {%- endif %}
       Roles:
@@ -420,7 +454,22 @@ Resources:
 {%- elif cookiecutter.event_destination == "sns" %}
   SnsTopic:
     Type: AWS::SNS::Topic
+
 {%- elif cookiecutter.event_destination == "sqs" %}
+  SqsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      DelaySeconds:
+        Ref: SqsQueueDelaySeconds
+      FifoQueue:
+        Ref: SqsQueueFifoQueue
+      MessageRetentionPeriod:
+        Ref: SqsQueueMessageRetentionPeriod
+      ReceiveMessageWaitTimeSeconds:
+        Ref: SqsQueueReceiveMessageWaitTimeSeconds
+      VisibilityTimeout:
+        Ref: SqsQueueVisibilityTimeout
+
 {%- endif %}
 {%- endif %}
 
