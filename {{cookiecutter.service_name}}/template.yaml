@@ -364,6 +364,12 @@ Resources:
               Fn::GetAtt:
                 - S3Bucket
                 - Arn
+{%- elif cookiecutter.event_destination == "sns" %}
+          - Effect: "Allow"
+            Action:
+              - "sns:<<SNS_ACTION>>"
+            Resource:
+              Ref: SnsTopic
 {%- endif %}
 {%- endif %}
       Roles:
@@ -412,6 +418,8 @@ Resources:
           Ref: S3BucketVersioningStatus
 
 {%- elif cookiecutter.event_destination == "sns" %}
+  SnsTopic:
+    Type: AWS::SNS::Topic
 {%- elif cookiecutter.event_destination == "sqs" %}
 {%- endif %}
 {%- endif %}
