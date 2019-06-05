@@ -17,13 +17,15 @@ Parameters:
       - 'ERROR'
       - 'CRITICAL'
 
-{% if cookiecutter.event_source != "other" %}
-  ## Event source configuration
+{%- if cookiecutter.event_source != "other" %}
+
+## Event source configuration
 {%- if cookiecutter.event_source == "apigateway" %}
   RestApiStageName:
     Type: String
     Description: "Name of deployment stage"
     Default: 'live'
+
 {%- elif cookiecutter.event_source == "cloudwatch-logs" %}
   EventCloudwatchLogGroupName:
     Type: String
@@ -149,11 +151,11 @@ Parameters:
       - True
       - False
     Default: True
-{%- endif -%}
+{%- endif %}
 {%- endif %}
 
 {%- if cookiecutter.event_destination != "other" %}
-  ## Event destination configurattion
+  ## Event destination configuration
   #
   # NOTE: The parameters here may not be an exhaustive list of possible
   # configuration. Refer to CloudFormation documentation for more.
@@ -350,9 +352,9 @@ Resources:
             Enabled:
               Ref: EventSqsQueueEnabled
 {%- endif %}
-{%- endif %}
+{% endif %}
 
-{% if cookiecutter.event_source == "apigateway" %}
+{%- if cookiecutter.event_source == "apigateway" %}
   RestApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -415,7 +417,6 @@ Resources:
       Roles:
         # This role is created implicitly by SAM.
         - Ref: {{cookiecutter.function_name}}Role
-
 
 {% if cookiecutter.event_destination != "other" %}
 {%- if cookiecutter.event_destination == "dynamodb" %}
