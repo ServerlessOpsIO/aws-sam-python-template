@@ -205,15 +205,15 @@ Parameters:
     Type: String
     Description: 'S3 bucket access control'
     AllowedValues:
-      - 'private'
-      - 'public-read'
-      - 'public-read-write'
-      - 'aws-exec-read'
-      - 'authenticated-read'
-      - 'bucket-owner-read'
-      - 'bucket-owner-full-control'
-      - 'log-delivery-write'
-    Default: 'private'
+      - 'Private'
+      - 'PublicRead'
+      - 'PublicReadWrite'
+      - 'AwsExecRead'
+      - 'AuthenticatedRead'
+      - 'BucketOwnerRead'
+      - 'BucketOwnerFullControl'
+      - 'LogDeliveryWrite'
+    Default: 'Private'
 
   S3BucketVersioningStatus:
     Type: String
