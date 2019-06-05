@@ -517,8 +517,12 @@ Resources:
         Ref: SqsQueueReceiveMessageWaitTimeSeconds
       VisibilityTimeout:
         Ref: SqsQueueVisibilityTimeout
-
 {%- endif %}
+{%- endif %}
+
+{% if cookiecutter.enable_cloudwatch_topic == "yes" %}
+  CloudWatchTopic:
+    Type: AWS::SNS::Topic
 {%- endif %}
 
 
@@ -689,5 +693,15 @@ Outputs:
       Name:
         Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}DlqTopicName"
 {%- endif %}
+{%- endif %}
+
+{% if cookiecutter.enable_cloudwatch_topic == "yes" %}
+  CloudWatchTopicArn:
+    Description: "ARN of CloudWatch topic"
+    Value:
+      Ref: CloudWatchTopicArn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-CloudWatchTopicArn"
 {%- endif %}
 
