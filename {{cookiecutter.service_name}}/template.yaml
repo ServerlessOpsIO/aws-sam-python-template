@@ -148,7 +148,10 @@ Parameters:
 {%- endif %}
 
 {%- if cookiecutter.event_destination != "other" %}
-  ## Event destination configurtation
+  ## Event destination configurattion
+  #
+  # NOTE: The parameters here may not be an exhaustive list of possible
+  # configuration. Refer to CloudFormation documentation for more.
 {%- if cookiecutter.event_destination == "dynamodb" %}
   DdbHashKeyName:
     Type: String
@@ -182,13 +185,33 @@ Parameters:
 {%- elif cookiecutter.event_destination == "kinesis" %}
   KinesisStreamRetentionHours:
     Type: Number
-    Description: "Stream retention period in hours"
+    Description: "Kinesis stream retention period in hours"
     Default: 24
 
   KinesisStreamShardCount:
     Type: Number
-    Description: "Stream retention period in hours"
+    Description: "Kinesis stream shard count"
     #Default: <<required: SHARD_COUNT>>
+
+{%- elif cookiecutter.event_destination == "s3" %}
+  S3BucketAccessControl:
+    Type: String
+    Description: 'S3 bucket access control'
+    AllowedValues:
+      - 'private'
+      - 'public-read'
+      - 'public-read-write'
+      - 'aws-exec-read'
+      - 'authenticated-read'
+      - 'bucket-owner-read'
+      - 'bucket-owner-full-control'
+      - 'log-delivery-write'
+    Default: 'private'
+
+  S3BucketVersioningStatus:
+    Type: String
+    Description: 'Bucket versioning status'
+    Default: 'Suspended'
 
 {%- endif -%}
 {%- endif %}
@@ -325,7 +348,6 @@ Resources:
               Fn::GetAtt:
                 - DynamoDBTable
                 - Arn
-
 {%- elif cookiecutter.event_destination == "kinesis" %}
           - Effect: "Allow"
             Action:
@@ -334,7 +356,14 @@ Resources:
               Fn::GetAtt:
                 - KinesisStream
                 - Arn
-
+{%- elif cookiecutter.event_destination == "s3" %}
+          - Effect: "Allow"
+            Action:
+              - "s3:<<S3_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - S3Bucket
+                - Arn
 {%- endif %}
 {%- endif %}
       Roles:
@@ -373,6 +402,15 @@ Resources:
       Ref: KinesisStreamShardCount
 
 {%- elif cookiecutter.event_destination == "s3" %}
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl:
+        Ref: S3BucketAccessControl
+      VersioningConfiguration:
+        Status:
+          Ref: S3BucketVersioningStatus
+
 {%- elif cookiecutter.event_destination == "sns" %}
 {%- elif cookiecutter.event_destination == "sqs" %}
 {%- endif %}
