@@ -480,11 +480,93 @@ Outputs:
   RestApiRoot:
     Description: "API Gateway endpoint URL for function"
     Value:
-      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/live"
 {%- endif %}
 
   {{cookiecutter.function_name}}Arn:
-    Description: "Hello World Lambda Function ARN"
+    Description: "Lambda Function ARN"
     Value:
       Fn::GetAtt: {{cookiecutter.function_name}}.Arn
 
+{% if cookiecutter.event_destination != "other" %}
+{%- if cookiecutter.event_destination == "dynamodb" %}
+  DynamoDBTableArn:
+    Description: "ARN of DynamoDB table"
+    Value:
+      Fn::GetAtt:
+        - DynamoDBTable
+        - Arn
+
+  DynamoDBTableName:
+    Description: "Name of DynamoDB table"
+    Value:
+      Ref: DynamoDBTable
+
+{%- elif cookiecutter.event_destination == "kinesis" %}
+  KinesisStreamArn:
+    Description: "ARN of Kinesis stream"
+    Value:
+      Fn::GetAtt:
+        - KinesisStream
+        - Arn
+
+  KinesisStreamName:
+    Description: "Name of Kinesis stream"
+    Value:
+      Ref: KinesisStream
+
+{%- elif cookiecutter.event_destination == "s3" %}
+  S3BucketArn:
+    Description: "ARN of S3 bucket"
+    Value:
+      Fn::GetAtt:
+        - S3Bucket
+        - Arn
+
+  S3BucketDomainName:
+    Description: "Domain name of S3 bucket"
+    Value:
+      Fn::GetAtt:
+        - S3Bucket
+        - DomainName
+
+  S3BucketName:
+    Description: "Name of S3 bucket"
+    Value:
+      Ref: S3Bucket
+
+{%- elif cookiecutter.event_destination == "sns" %}
+  SnsTopicArn:
+    Description: "ARN of SNS topic"
+    Value:
+      Fn::GetAtt:
+        - SnsTopic
+        - Arn
+
+  SnsTopiceName:
+    Description: "Name of SNS topic"
+    Value:
+      Ref: SnsTopic
+
+{%- elif cookiecutter.event_destination == "sqs" %}
+  SqsQueueArn:
+    Description: "ARN of SQS queue"
+    Value:
+      Fn::GetAtt:
+        - SqsQueue
+        - Arn
+
+  SqsQueueName:
+    Description: "Name of SQS queue"
+    Value:
+      Fn::GetAtt:
+        - SqsQueue
+        - QueueName
+
+  SqsQueueUrl:
+    Description: "Url of SQS queue"
+    Value:
+      Ref: SqsQueue
+
+{%- endif %}
+{%- endif %}
