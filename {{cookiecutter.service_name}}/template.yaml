@@ -174,14 +174,6 @@ Parameters:
       - "B"
     #Default: <<required: HASH_KEY_TYPE>>
 
-  DdbRetentionPolicy:
-    Type: String
-    Description: 'DDB table stack retention policy'
-    AllowedValues:
-      - 'Delete'
-      - 'Retain'
-    Default: 'Retain'
-
   # Optional range key information
   #DdbRangeKeyName:
   #  Type: String
@@ -222,14 +214,6 @@ Parameters:
       - 'BucketOwnerFullControl'
       - 'LogDeliveryWrite'
     Default: 'Private'
-
-  S3BucketRetentionPolicy:
-    Type: String
-    Description: 'S3 bucket stack retention policy'
-    AllowedValues:
-      - 'Delete'
-      - 'Retain'
-    Default: 'Retain'
 
   S3BucketVersioningStatus:
     Type: String
@@ -439,8 +423,8 @@ Resources:
 {%- if cookiecutter.event_destination == "dynamodb" %}
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy:
-      Ref: DdbRetentionPolicy
+    # NOTE: Retain data by default
+    DeletionPolicy: 'Retain'
     Properties:
       AttributeDefinitions:
         - AttributeName:
@@ -471,8 +455,8 @@ Resources:
 {%- elif cookiecutter.event_destination == "s3" %}
   S3Bucket:
     Type: AWS::S3::Bucket
-    DeletionPolicy:
-      Ref: S3BucketRetentionPolicy
+    # NOTE: Retain data by default
+    DeletionPolicy: 'Retain'
     Properties:
       AccessControl:
         Ref: S3BucketAccessControl
