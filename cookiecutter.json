@@ -33,6 +33,11 @@
     "sns",
     "sqs"
   ],
+  "dlq_type": [
+    "none",
+    "sqs",
+    "sns"
+  ],
   "enable_xray": [
     "no",
     "yes"
