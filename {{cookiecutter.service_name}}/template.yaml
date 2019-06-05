@@ -704,7 +704,7 @@ Outputs:
   CloudWatchTopicArn:
     Description: "ARN of CloudWatch topic"
     Value:
-      Ref: CloudWatchTopicArn
+      Ref: CloudWatchTopic
     Export:
       Name:
         Fn::Sub: "${AWS::StackName}-CloudWatchTopicArn"
