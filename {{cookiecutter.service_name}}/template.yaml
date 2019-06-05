@@ -19,7 +19,12 @@ Parameters:
 
 {% if cookiecutter.event_source != "other" %}
   ## Event source configuration
-{%- if cookiecutter.event_source == "cloudwatch-logs" %}
+{%- if cookiecutter.event_source == "apigateway" %}
+  RestApiStageName:
+    Type: String
+    Description: "Name of deployment stage"
+    Default: 'live'
+{%- elif cookiecutter.event_source == "cloudwatch-logs" %}
   EventCloudwatchLogGroupName:
     Type: String
     Description: "Name of triggering log group"
@@ -351,7 +356,8 @@ Resources:
   RestApi:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: 'live'
+      StageName:
+        Ref: RestApiStageName
       #DefinitionUri: swagger.yml
 {%- endif %}
 
@@ -477,11 +483,10 @@ Resources:
 
 Outputs:
 {%- if cookiecutter.event_source == "apigateway" %}
-  # FIXME: Fix API root
   RestApiRoot:
     Description: "API Gateway endpoint URL for function"
     Value:
-      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/live"
+      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${RestApiStageName}"
 {%- endif %}
 
   {{cookiecutter.function_name}}Arn:
