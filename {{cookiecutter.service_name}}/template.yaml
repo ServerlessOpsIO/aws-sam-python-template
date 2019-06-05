@@ -542,14 +542,6 @@ Outputs:
         Fn::Sub: "${AWS::StackName}-RestApiRoot"
 {%- endif %}
 
-  {{cookiecutter.function_name}}Arn:
-    Description: "Lambda Function ARN"
-    Value:
-      Fn::GetAtt: {{cookiecutter.function_name}}.Arn
-    Export:
-      Name:
-        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}Arn"
-
 {% if cookiecutter.event_destination != "other" %}
 {%- if cookiecutter.event_destination == "dynamodb" %}
   DynamoDBTableArn:
