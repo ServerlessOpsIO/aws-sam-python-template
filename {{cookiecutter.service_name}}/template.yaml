@@ -136,7 +136,7 @@ Parameters:
   EventSqsQueueArn:
     Type: String
     Description: "ARN of stream"
-    #Default: <<required: STREAM_ARN>>
+    #Default: <<required: QUEUE_ARN>>
 
   EventSqsQueueBatchSize:
     Type: String
@@ -154,11 +154,11 @@ Parameters:
 {%- endif %}
 {%- endif %}
 
-{%- if cookiecutter.event_destination != "other" %}
-  ## Event destination configuration
-  #
-  # NOTE: The parameters here may not be an exhaustive list of possible
-  # configuration. Refer to CloudFormation documentation for more.
+{% if cookiecutter.event_destination != "other" %}
+## Event destination configuration
+#
+# NOTE: The parameters here may not be an exhaustive list of possible
+# configuration. Refer to CloudFormation documentation for more.
 {%- if cookiecutter.event_destination == "dynamodb" %}
   DdbHashKeyName:
     Type: String
@@ -233,17 +233,17 @@ Parameters:
 
   SqsQueueMessageRetentionPeriod:
     Type: Number
-    Description: "Sqs queue message retention period"
+    Description: "SQS queue message retention period"
     Default: 345600
 
   SqsQueueReceiveMessageWaitTimeSeconds:
     Type: Number
-    Description: "Sqs queue polling length in seconds"
+    Description: "SQS queue polling length in seconds"
     Default: 0
 
   SqsQueueVisibilityTimeout:
     Type: Number
-    Description: "Sqs queue visibility timeout in seconds"
+    Description: "SQS queue visibility timeout in seconds"
     Default: 30
 
 {%- endif -%}
@@ -266,6 +266,7 @@ Resources:
   {{cookiecutter.function_name}}:
     Type: AWS::Serverless::Function
     Properties:
+      Description: "{{cookiecutter.function_description}}"
       CodeUri: src/handlers/{{cookiecutter.function_name}}
       Handler: function.handler
       Runtime: python3.7
