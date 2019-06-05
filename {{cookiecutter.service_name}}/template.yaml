@@ -436,6 +436,7 @@ Resources:
 
 {%- elif cookiecutter.event_destination == "kinesis" %}
   KinesisStream:
+    Type: AWS::Kinesis::Stream
     RetentionPeriodHours:
       Ref: KinesisStreamRetentionHours
     ShardCount:
