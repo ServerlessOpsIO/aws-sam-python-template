@@ -488,92 +488,120 @@ Outputs:
     Description: "API Gateway endpoint URL for function"
     Value:
       Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${RestApiStageName}"
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-RestApiRoot"
 {%- endif %}
 
   {{cookiecutter.function_name}}Arn:
     Description: "Lambda Function ARN"
     Value:
       Fn::GetAtt: {{cookiecutter.function_name}}.Arn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}Arn"
 
 {% if cookiecutter.event_destination != "other" %}
 {%- if cookiecutter.event_destination == "dynamodb" %}
   DynamoDBTableArn:
     Description: "ARN of DynamoDB table"
     Value:
-      Fn::GetAtt:
-        - DynamoDBTable
-        - Arn
+      Fn::GetAtt: DynamoDBTable.Arn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-DynamoDBTableArn"
 
   DynamoDBTableName:
     Description: "Name of DynamoDB table"
     Value:
       Ref: DynamoDBTable
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-DynamoDBTableName"
 
 {%- elif cookiecutter.event_destination == "kinesis" %}
   KinesisStreamArn:
     Description: "ARN of Kinesis stream"
     Value:
-      Fn::GetAtt:
-        - KinesisStream
-        - Arn
+      Fn::GetAtt: KinesisStream.Arn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-KinesisStreamArn"
 
   KinesisStreamName:
     Description: "Name of Kinesis stream"
     Value:
       Ref: KinesisStream
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-KinesisStreamName"
 
 {%- elif cookiecutter.event_destination == "s3" %}
   S3BucketArn:
     Description: "ARN of S3 bucket"
     Value:
-      Fn::GetAtt:
-        - S3Bucket
-        - Arn
+      Fn::GetAtt: S3Bucket.Arn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-S3BucketArn"
 
   S3BucketDomainName:
     Description: "Domain name of S3 bucket"
     Value:
-      Fn::GetAtt:
-        - S3Bucket
-        - DomainName
+      Fn::GetAtt: S3Bucket.DomainName
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-S3BucketDomainName"
 
   S3BucketName:
     Description: "Name of S3 bucket"
     Value:
       Ref: S3Bucket
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-S3BucketName"
 
 {%- elif cookiecutter.event_destination == "sns" %}
   SnsTopicArn:
     Description: "ARN of SNS topic"
     Value:
-      Fn::GetAtt:
-        - SnsTopic
-        - Arn
+      Fn::GetAtt: SnsTopic.Arn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-SnsTopicArn"
 
   SnsTopiceName:
     Description: "Name of SNS topic"
     Value:
       Ref: SnsTopic
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-SnsTopiceName"
 
 {%- elif cookiecutter.event_destination == "sqs" %}
   SqsQueueArn:
     Description: "ARN of SQS queue"
     Value:
-      Fn::GetAtt:
-        - SqsQueue
-        - Arn
+      Fn::GetAtt: SqsQueue.Arn
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-SqsQueueArn"
 
   SqsQueueName:
     Description: "Name of SQS queue"
     Value:
-      Fn::GetAtt:
-        - SqsQueue
-        - QueueName
+      Fn::GetAtt: SqsQueue.QueueName
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-SqsQueueName"
 
   SqsQueueUrl:
     Description: "Url of SQS queue"
     Value:
       Ref: SqsQueue
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-SqsQueueUrl"
 
 {%- endif %}
 {%- endif %}
