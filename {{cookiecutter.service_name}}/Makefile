@@ -37,7 +37,7 @@ package: build
 
 deploy: bucket package
 	$(info Deploying to personal development stack)
-	sam deploy --profile ${AWS_PROFILE} --template-file $(PACKAGED_TEMPLATE) --stack-name $(STACKNAME) --capabilities CAPABILITY_IAM
+	sam deploy --parameter-overrides Environment=$(ENV) --profile ${AWS_PROFILE} --template-file $(PACKAGED_TEMPLATE) --stack-name $(STACKNAME) --capabilities CAPABILITY_IAM
 
 integ-test:
 	# Integration tests don't need code coverage
