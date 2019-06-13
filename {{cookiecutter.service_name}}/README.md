@@ -42,7 +42,7 @@
 * [Pipenv installed](https://github.com/pypa/pipenv)
     - `pip install pipenv`
 * [Docker installed](https://www.docker.com/community-edition)
-* [SAM Local installed](https://github.com/awslabs/aws-sam-local)
+* [SAM CLI installed](https://github.com/awslabs/aws-sam-cli)
 
 ## Setup process
 
