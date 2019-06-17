@@ -88,6 +88,22 @@ deploy: bucket package
 	$(info Deploying to personal development stack)
 	sam deploy --parameter-overrides Environment=$(ENV) --profile ${AWS_PROFILE} --template-file $(PACKAGED_TEMPLATE) --stack-name $(STACKNAME) --capabilities CAPABILITY_IAM
 
+describe:
+	$(info Describing stack)
+	@aws cloudformation describe-stacks --stack-name $(STACKNAME) --output table --query 'Stacks[0]'
+
+outputs:
+	$(info Displaying stack outputs)
+	@aws cloudformation describe-stacks --stack-name $(STACKNAME) --output table --query 'Stacks[0].Parameters'
+
+parameters:
+	$(info Displaying stack parameters)
+	@aws cloudformation describe-stacks --stack-name $(STACKNAME) --output table --query 'Stacks[0].Parameters'
+
+delete:
+	$(info Delete stack)
+	@aws cloudformation delete-stack --stack-name $(STACKNAME)
+
 integ-test:
 	# Integration tests don't need code coverage
 	pipenv run pytest tests/integration --stack $(STACKNAME) --profile ${AWS_PROFILE} -s
