@@ -6,7 +6,12 @@ Description: >
   {{cookiecutter.service_description}}
 
 Parameters:
-  Environment:
+  ServiceName:
+    Type: String
+    Description: "Name of service"
+    Default: {{cookiecutter.service_name}}
+
+  ServiceEnv:
     Type: String
     Description: "Name of deployment environment"
 
@@ -268,9 +273,9 @@ Globals:
       Variables:
         LOG_LEVEL:
           Ref: LogLevel
-{%- if cookiecutter.enable_xray == "y" %}
-    Tracing: Active
-{%- endif %}
+    Tags:
+      ServiceName: !Ref ServiceName
+      ServiceEnv: !Ref ServiceEnv
 
 
 Resources:
@@ -397,7 +402,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName:
-        Ref: Environment
+        Ref: ServiceEnv
       #DefinitionUri: swagger.yml
 {%- endif %}
 
@@ -534,7 +539,7 @@ Outputs:
   RestApiRoot:
     Description: "API Gateway endpoint URL for function"
     Value:
-      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"
+      Fn::Sub: "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${ServiceEnv}"
     Export:
       Name:
         Fn::Sub: "${AWS::StackName}-RestApiRoot"
