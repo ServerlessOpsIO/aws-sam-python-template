@@ -313,9 +313,8 @@ Resources:
         - Statement:
           - Effect: "Allow"
             Action:
-              - "ssm:GetParameters"
               - "ssm:GetParameter"
-            Resource: !Sub "/${ServiceName}/${Environment}"
+            Resource: !Sub "/${ServiceName}/${ServiceEnv}/*"
 {%- if cookiecutter.event_destination != "other" %}
         - Statement:
 {%- if cookiecutter.event_destination == "dynamodb" %}
