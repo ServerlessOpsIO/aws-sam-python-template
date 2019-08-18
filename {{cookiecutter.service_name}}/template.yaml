@@ -302,6 +302,56 @@ Resources:
           Ref: {{cookiecutter.function_name}}DlqTopic
 {%- endif %}
 {%- endif %}
+      Policies:
+        - Statement:
+          - Effect: "Allow"
+            Action:
+              - "ssm:GetParameters"
+              - "ssm:GetParameter"
+            Resource: !Sub "/${ServiceName}/${Environment}"
+{%- if cookiecutter.event_destination != "other" %}
+        - Statement:
+{%- if cookiecutter.event_destination == "dynamodb" %}
+          - Effect: "Allow"
+            Action:
+              - "dynanodb:<<DDB_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - DynamoDBTable
+                - Arn
+{%- elif cookiecutter.event_destination == "kinesis" %}
+          - Effect: "Allow"
+            Action:
+              - "kinesis:<<KINESIS_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - KinesisStream
+                - Arn
+{%- elif cookiecutter.event_destination == "s3" %}
+          - Effect: "Allow"
+            Action:
+              - "s3:<<S3_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - S3Bucket
+                - Arn
+{%- elif cookiecutter.event_destination == "sns" %}
+          - Effect: "Allow"
+            Action:
+              - "sns:<<SNS_ACTION>>"
+            Resource:
+              Ref: SnsTopic
+{%- elif cookiecutter.event_destination == "sqs" %}
+          - Effect: "Allow"
+            Action:
+              - "sqs:<<SQS_ACTION>>"
+            Resource:
+              Fn::GetAtt:
+                - SqsQueue
+                - Arn
+{%- endif %}
+{%- endif %}
+
 {%- if cookiecutter.event_source != "other" %}
       Events:
 {%- if cookiecutter.event_source == "apigateway" %}
@@ -406,60 +456,6 @@ Resources:
       #DefinitionUri: swagger.yml
 {%- endif %}
 
-  {{cookiecutter.function_name}}Policy:
-    Type: "AWS::IAM::Policy"
-    Properties:
-      PolicyName: "root"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action: "ssm:GetParameters"
-            Resource: "*"
-{%- if cookiecutter.event_destination != "other" %}
-{%- if cookiecutter.event_destination == "dynamodb" %}
-          - Effect: "Allow"
-            Action:
-              - "dynanodb:<<DDB_ACTION>>"
-            Resource:
-              Fn::GetAtt:
-                - DynamoDBTable
-                - Arn
-{%- elif cookiecutter.event_destination == "kinesis" %}
-          - Effect: "Allow"
-            Action:
-              - "kinesis:<<KINESIS_ACTION>>"
-            Resource:
-              Fn::GetAtt:
-                - KinesisStream
-                - Arn
-{%- elif cookiecutter.event_destination == "s3" %}
-          - Effect: "Allow"
-            Action:
-              - "s3:<<S3_ACTION>>"
-            Resource:
-              Fn::GetAtt:
-                - S3Bucket
-                - Arn
-{%- elif cookiecutter.event_destination == "sns" %}
-          - Effect: "Allow"
-            Action:
-              - "sns:<<SNS_ACTION>>"
-            Resource:
-              Ref: SnsTopic
-{%- elif cookiecutter.event_destination == "sqs" %}
-          - Effect: "Allow"
-            Action:
-              - "sqs:<<SQS_ACTION>>"
-            Resource:
-              Fn::GetAtt:
-                - SqsQueue
-                - Arn
-{%- endif %}
-{%- endif %}
-      Roles:
-        # This role is created implicitly by SAM.
-        - Ref: {{cookiecutter.function_name}}Role
 
 {% if cookiecutter.event_destination != "other" %}
 {%- if cookiecutter.event_destination == "dynamodb" %}
