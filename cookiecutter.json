@@ -38,10 +38,6 @@
     "sqs",
     "sns"
   ],
-  "enable_xray": [
-    "no",
-    "yes"
-  ],
   "enable_cloudwatch_topic": [
     "no",
     "yes"

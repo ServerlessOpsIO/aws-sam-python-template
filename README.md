@@ -21,7 +21,6 @@ Depending on the options selected the following may also be created or configure
     * Adds IAM policy statement to allow function to write to destination
     * Adds CloudFormation stack output for service discovery
 * Dead-letter queue or topic for failed function invocations
-* Enable AWS X-Ray tracing
 * CloudWatch alarm/event topic
     * Other services may subscribe to this in order to process alarms and events
 
@@ -73,6 +72,5 @@ Option | Description
 `event_source`              |   Select a function event source. (Use `other` to skip configuration)
 `event_destination`         |   Select a function event destination. (Use `other` to skip configuration)
 `dlq_type`                  |   Add a function dead-letter queue or topic. (Use `none` to skip configuration)
-`enable_xray`               |   Enable X-Ray tracing
 `enable_cloudwatch_topic`   |   Create an SNS topic for CloudWatch alarms and events
 

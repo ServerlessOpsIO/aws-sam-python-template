@@ -4,13 +4,12 @@ import json
 import logging
 import os
 
-{%- if cookiecutter.enable_xray == "y" %}
+# AWS X-RAY
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.core import patch_all
 # Only instrument libraries if not running locally
 if "AWS_SAM_LOCAL" not in os.environ:
     patch_all()
-{%- endif %}
 
 
 # This path reflects the packaged path

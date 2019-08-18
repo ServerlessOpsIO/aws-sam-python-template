@@ -9,9 +9,7 @@ python_version = "3.7"
 # FIXME: need to include src.common
 [packages]
 common = {editable = true, path = "src/common"}
-{%- if cookiecutter.enable_xray == "yes" %}
 aws-xray-sdk = "*"
-{% endif %}
 
 [dev-packages]
 flake8 = "*"

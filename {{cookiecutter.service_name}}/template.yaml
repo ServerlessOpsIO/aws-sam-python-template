@@ -26,6 +26,22 @@ Parameters:
       - 'ERROR'
       - 'CRITICAL'
 
+  XRaySDKEnabled:
+    Type: String
+    Description: "AWS X-RAY SDK enabled"
+    Default: false
+    AllowedValues:
+      - true
+      - false
+
+  XRayTracingMode:
+    Type: String
+    Description: "AWS XRay tracing mode"
+    Default: PassThrough
+    AllowedValues:
+      - Active
+      - PassThrough
+
   {{cookiecutter.function_name}}MemorySize:
     Type: String
     Description: "{{cookiecutter.function_name}} function memory size"
@@ -273,9 +289,12 @@ Globals:
       Variables:
         LOG_LEVEL:
           Ref: LogLevel
+        AWS_XRAY_SDK_ENABLED:
+          Ref: XRaySDKEnabled
     Tags:
       ServiceName: !Ref ServiceName
       ServiceEnv: !Ref ServiceEnv
+    Tracing: !Ref XRayTracingMode
 
 
 Resources:
