@@ -76,3 +76,6 @@ Option | Description
 `dlq_type`                  |   Add a function dead-letter queue or topic. (Use `none` to skip configuration)
 `enable_cloudwatch_topic`   |   Create an SNS topic for CloudWatch alarms and events
 
+## Credits
+Initially developed for [SingleStone Consulting](https://www.singlestoneconsulting.com/) for a serverless application project.
+
