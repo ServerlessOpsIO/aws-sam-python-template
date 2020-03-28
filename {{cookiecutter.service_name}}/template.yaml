@@ -291,7 +291,7 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ssm:GetParameter"
-            Resource: !Sub "/${ServiceName}/${ServiceEnv}/*"
+            Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/${ServiceEnv}/*"
 {%- if cookiecutter.event_destination != "other" %}
         - Statement:
 {%- if cookiecutter.event_destination == "dynamodb" %}
