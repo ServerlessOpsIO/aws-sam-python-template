@@ -26,10 +26,10 @@ Parameters:
   XRaySDKEnabled:
     Type: String
     Description: "AWS X-RAY SDK enabled"
-    Default: false
+    Default: 'Disabled'
     AllowedValues:
-      - true
-      - false
+      - 'Enabled'
+      - 'Disabled'
 
   XRayTracingMode:
     Type: String
@@ -239,6 +239,12 @@ Parameters:
 {%- endif -%}
 {%- endif %}
 
+Mappings:
+  XRaySDKEnabled:
+    Enabled:
+      Enabled: "true"
+    Disabled:
+      Enabled: "false"
 
 Globals:
   Function:
@@ -247,7 +253,10 @@ Globals:
         LOG_LEVEL:
           Ref: LogLevel
         AWS_XRAY_SDK_ENABLED:
-          Ref: XRaySDKEnabled
+          Fn::FindInMap:
+            - XRaySDKEnabled
+            - Ref: XRaySDKEnabled
+            - Enabled
     Tags:
       ServiceName: !Ref ServiceName
       ServiceEnv: !Ref ServiceEnv
