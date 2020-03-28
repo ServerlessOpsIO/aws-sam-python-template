@@ -291,7 +291,7 @@ Resources:
       Description: "{{cookiecutter.function_description}}"
       CodeUri: src/handlers/{{cookiecutter.function_name}}
       Handler: function.handler
-      Runtime: python3.7
+      Runtime: python{{ cookiecutter.python_version }}
       MemorySize: 128
       Timeout: 3
 {%- if cookiecutter.dlq_type != "none" %}

@@ -1,5 +1,5 @@
-# AWS SAM Python 3.7 Template
-AWS SAM [Cookiecutter](https://github.com/audreyr/cookiecutter) template for creating a Python 3.7 project.
+# AWS SAM Python Template
+AWS SAM [Cookiecutter](https://github.com/audreyr/cookiecutter) template for creating a Python project.
 
 This template can be used by SAM CLI to generate a new project skeleton. During the process of creating a new project you will be asked to select options for how your project should be configured. A description of these options is found in the **Options** section of this README. This template does its best to handle as much boilerplate work as possible and guide people towards using best practices.
 
@@ -35,7 +35,7 @@ $ pip install aws-sam-cli
 More extensive instructions can be found here: [Installing the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 
 
-### 2. **Create a `~/.cookiecutter.rc` file**
+### 2. **Create a `~/.cookiecutterrc` file**
 Create a configuration file to fill in a few default values during project initialization
 
 ```
@@ -53,7 +53,7 @@ abbreviations:
 Create a new project by running the command below. This will ask you a series of questions and customize the generated project based on your answers.
 
 ```
-$ sam init --location gh:serverlessops/sam-py37
+$ sam init --location gh:serverlessops/aws-sam-python-template
 ```
 
 ## Options
@@ -69,6 +69,8 @@ Option | Description
 `author_name`               |   Author name
 `author_email`              |   Author email
 `year`                      |   Year (for copyright)
+`python_version`            |   Python version (ex. 3.8)
+`python_runtime             |   AWS Lambda Python run time (ex. python38)
 `event_source`              |   Select a function event source. (Use `other` to skip configuration)
 `event_destination`         |   Select a function event destination. (Use `other` to skip configuration)
 `dlq_type`                  |   Add a function dead-letter queue or topic. (Use `none` to skip configuration)

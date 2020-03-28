@@ -14,14 +14,14 @@ setup(
     license='Apache License 2.0',
     packages=find_packages(exclude=['tests.*', 'tests']),
     keywords="{{cookiecutter.service_name}} Service",
-    python_requires='>=3.7.*',
+    python_requires='>={{cookiecutter.python_version}}.*',
     include_package_data=True,
     classifiers=[
         'Environment :: Console',
         'Environment :: Other Environment',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: {{cookiecutter.python_version}}',
     ]
 )
 

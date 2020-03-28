@@ -1,5 +1,5 @@
 init:
-	pipenv --python 3.7
+	pipenv --python {{cookiecutter.python_version}}
 	pipenv install --dev
 
 # Command to run everytime you make changes to verify everything works
