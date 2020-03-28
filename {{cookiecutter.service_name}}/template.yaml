@@ -175,37 +175,7 @@ Parameters:
 #
 # NOTE: The parameters here may not be an exhaustive list of possible
 # configuration. Refer to CloudFormation documentation for more.
-{%- if cookiecutter.event_destination == "dynamodb" %}
-  DdbHashKeyName:
-    Type: String
-    Description: "DDB table hash key name"
-    #Default: <<required: HASH_KEY_NAME>>
-
-  DdbHashKeyType:
-    Type: String
-    Description: "DDB table hash key name"
-    AllowedValues:
-      - "S"
-      - "N"
-      - "B"
-    #Default: <<required: HASH_KEY_TYPE>>
-
-  # Optional range key information
-  #DdbRangeKeyName:
-  #  Type: String
-  #  Description: "DDB table hash key name"
-  #  Default: <<required: RANGE_KEY_NAME>>
-
-  #DdbRangeKeyType:
-  #  Type: String
-  #  Description: "DDB table range key type"
-  #  AllowedValues:
-  #    - "S"
-  #    - "N"
-  #    - "B"
-  #  Default: <<required: RANGE_KEY_TYPE>>
-
-{%- elif cookiecutter.event_destination == "kinesis" %}
+{%- if cookiecutter.event_destination == "kinesis" %}
   KinesisStreamRetentionHours:
     Type: Number
     Description: "Kinesis stream retention period in hours"
@@ -468,20 +438,14 @@ Resources:
     DeletionPolicy: 'Retain'
     Properties:
       AttributeDefinitions:
-        - AttributeName:
-            Ref: DdbHashKeyName
-          AttributeType:
-            Ref: DdbHashKeyType
-        #- AttributeName:
-        #    Ref: DdbRangeKeyName
-        #  AttributeType:
-        #    Ref: DdbRangeKeyType
+        - AttributeName: "pk"
+          AttributeType: "S"
+        #- AttributeName: "sk"
+        #  AttributeType: "S"
       KeySchema:
-        - AttributeName:
-            Ref: DdbHashKeyName
+        - AttributeName: "pk"
           KeyType: "HASH"
-        #- AttributeName:
-        #    Ref: DdbRangeKeyName
+        #- AttributeName: "sk"
         #  KeyType: "RANGE"
       BillingMode: "PAY_PER_REQUEST"
 
