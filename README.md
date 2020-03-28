@@ -8,8 +8,6 @@ When creating a new project the following will be created.
 * An AWS SAM template
 * A single Lambda function
     * Use this function as an example of what any additional functions in the project should look like.
-* A sample event message
-    * Adjust the event's message to suit your needs.
 
 Depending on the options selected the following may also be created or configured.
 
