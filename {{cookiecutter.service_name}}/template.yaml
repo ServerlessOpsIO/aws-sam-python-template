@@ -172,10 +172,6 @@ Parameters:
 {%- endif %}
 
 {% if cookiecutter.event_destination != "other" %}
-## Event destination configuration
-#
-# NOTE: The parameters here may not be an exhaustive list of possible
-# configuration. Refer to CloudFormation documentation for more.
 {%- if cookiecutter.event_destination == "kinesis" %}
   KinesisStreamRetentionHours:
     Type: Number
