@@ -36,7 +36,7 @@ describe:
 
 outputs:
 	$(info Displaying stack outputs)
-	@aws cloudformation describe-stacks --stack-name $(STACKNAME) --output table --query 'Stacks[0].Parameters'
+	@aws cloudformation describe-stacks --stack-name $(STACKNAME) --output table --query 'Stacks[0].Outputs'
 
 parameters:
 	$(info Displaying stack parameters)
