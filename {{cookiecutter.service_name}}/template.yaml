@@ -42,16 +42,6 @@ Parameters:
       - Active
       - PassThrough
 
-  {{cookiecutter.function_name}}MemorySize:
-    Type: String
-    Description: "{{cookiecutter.function_name}} function memory size"
-    Default: 128
-
-  {{cookiecutter.function_name}}Timeout:
-    Type: String
-    Description: "{{cookiecutter.function_name}} function timeout"
-    Default: 3
-
 {%- if cookiecutter.event_source != "other" %}
 
 ## Event source configuration
@@ -305,10 +295,8 @@ Resources:
       CodeUri: src/handlers/{{cookiecutter.function_name}}
       Handler: function.handler
       Runtime: python3.7
-      MemorySize:
-        Ref: {{cookiecutter.function_name}}MemorySize
-      Timeout:
-        Ref: {{cookiecutter.function_name}}Timeout
+      MemorySize: 128
+      Timeout: 3
 {%- if cookiecutter.dlq_type != "none" %}
       DeadLetterQueue:
 {%- if cookiecutter.dlq_type == "sqs" %}
