@@ -9,10 +9,8 @@ dev: flake lint test
 pr: init dev
 
 ENV ?= ${USER}
-AWS_ACCOUNT = $(shell aws sts get-caller-identity | jq -r .Account)
 STACKNAME = $(shell basename ${CURDIR})-$(ENV)
-BUCKET = $(shell basename ${CURDIR})-package-$(ENV)-$(AWS_ACCOUNT)
-PACKAGED_TEMPLATE = .aws-sam/packaged-template.yaml
+AWS_REGION ?= $(shell aws configure get region)
 
 check_profile:
 	# Make sure we have a user-scoped credentials profile set. We don't want to be accidentally using the default profile
@@ -22,13 +20,9 @@ build:
 	$(info Building application)
 	sam build
 
-package: build
-	$(info Creating package)
-	sam package --profile ${AWS_PROFILE} --s3-bucket $(BUCKET) --output-template-file $(PACKAGED_TEMPLATE)
-
-deploy: bucket package
+deploy: build
 	$(info Deploying to personal development stack)
-	sam deploy --parameter-overrides Environment=$(ENV) --profile ${AWS_PROFILE} --template-file $(PACKAGED_TEMPLATE) --stack-name $(STACKNAME) --capabilities CAPABILITY_IAM
+	sam deploy --stack-name $(STACKNAME) --parameter-overrides Environment=$(ENV) --region ${AWS_REGION}
 
 describe:
 	$(info Describing stack)
