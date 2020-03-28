@@ -40,6 +40,14 @@ delete:
 	$(info Delete stack)
 	@aws cloudformation delete-stack --stack-name $(STACKNAME)
 
+function:
+	mkdir -p src/handlers/${F}
+	touch src/handlers/${F}/__init__.py
+	touch src/handlers/${F}/function.py
+	touch tests/unit/src/handlers/${F}/test_handler.py
+	touch tests/integration/src/handlers/${F}/test_handler.py
+	echo "-e src/common/" > src/handlers/${F}/requirements.txt
+
 integ-test:
 	# Integration tests don't need code coverage
 	pipenv run pytest tests/integration --stack $(STACKNAME) --profile ${AWS_PROFILE} -s
