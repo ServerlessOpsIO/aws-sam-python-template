@@ -1,5 +1,4 @@
 '''{{cookiecutter.function_description}}'''
-
 import json
 import logging
 import os
@@ -23,16 +22,16 @@ def handler(event, context):
     '''Function entry'''
     _logger.debug('Event: {}'.format(json.dumps(event)))
 
-{%- if cookiecutter.event_source == "apigateway" %}
+{% if cookiecutter.event_source == "apigateway" %}
     resp = {
         "statusCode": 200,
         "body": json.dumps({
             "message": "hello world",
         }),
     }
-{%- else -%}
+{% else %}
     resp = {}
-{%- endif %}
+{% endif %}
 
     _logger.debug('Response: {}'.format(json.dumps(resp)))
     return resp
