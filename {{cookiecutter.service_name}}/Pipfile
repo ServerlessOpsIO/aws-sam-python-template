@@ -15,6 +15,7 @@ aws-xray-sdk = "*"
 flake8 = "*"
 moto = "*"
 mypy = "*"
+boto3-stubs = { extras = ["dynamodb", "lambda", "kinesis", "s3", "sns", "sqs", "ssm", "xray" ], version = "*"}
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
