@@ -6,7 +6,7 @@ Parameters:
   ServiceName:
     Type: String
     Description: "Name of service"
-    Default: {{cookiecutter.service_name}}
+    Default: "{{cookiecutter.service_name}}"
 
   ServiceEnv:
     Type: String
