@@ -48,6 +48,7 @@ delete:
 	@aws cloudformation delete-stack --stack-name $(STACKNAME)
 
 function:
+	$(info creating function: ${F})
 	mkdir -p src/handlers/${F}
 	touch src/handlers/${F}/__init__.py
 	touch src/handlers/${F}/function.py
@@ -55,24 +56,36 @@ function:
 	touch tests/integration/src/handlers/${F}/test_handler.py
 	echo "-e src/common/" > src/handlers/${F}/requirements.txt
 
-integ-test:
+unit-test:
+	$(info running unit tests)
 	# Integration tests don't need code coverage
-	pipenv run pytest tests/integration --stack $(STACKNAME) --profile ${AWS_PROFILE} -s
+	pipenv run pytest tests/unit
+
+integ-test:
+	$(info running integration tests)
+	# Integration tests don't need code coverage
+	pipenv run pytest tests/integration
 
 test:
+	$(info running tests)
 	# Run unit tests
 	# Fail if coverage falls below 95%
 	pipenv run test
 
-flake:
+flake8:
+	$(info running flake8 on code)
 	# Make sure code conforms to PEP8 standards
 	pipenv run flake8 src
 	pipenv run flake8 tests/unit tests/integration
 
-lint:
+pylint:
+	$(info running pylint on code)
 	# Linter performs static analysis to catch latent bugs
 	pipenv run lint --rcfile .pylintrc src
 
+lint: pylint flake8
+
 clean:
+	$(info cleaning project)
 	# remove sam cache
 	rm -rf .aws-sam
