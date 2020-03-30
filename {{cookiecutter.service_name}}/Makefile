@@ -20,7 +20,14 @@ build:
 	$(info Building application)
 	sam build
 
-deploy: build
+validate:
+	$(info linting SAM template)
+	$(info linting CloudFormation)
+	@cfn-lint template.yaml
+	$(info validating SAM template)
+	@sam validate
+
+deploy: build validate
 	$(info Deploying to personal development stack)
 	sam deploy --stack-name $(STACKNAME) --parameter-overrides Environment=$(ENV) --region ${AWS_REGION}
 
