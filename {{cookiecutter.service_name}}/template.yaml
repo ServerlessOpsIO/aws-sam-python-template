@@ -441,7 +441,8 @@ Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     # NOTE: Retain data by default
-    DeletionPolicy: 'Retain'
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       AttributeDefinitions:
         - AttributeName: "pk"
