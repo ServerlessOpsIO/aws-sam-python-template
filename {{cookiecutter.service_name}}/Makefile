@@ -66,4 +66,6 @@ lint:
 	# Linter performs static analysis to catch latent bugs
 	pipenv run lint --rcfile .pylintrc src
 
-
+clean:
+	# remove sam cache
+	rm -rf .aws-sam
