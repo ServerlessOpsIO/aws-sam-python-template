@@ -11,7 +11,8 @@ if "AWS_SAM_LOCAL" not in os.environ:
     patch_all()
 
 
-# This path reflects the packaged path
+# This path reflects the packaged path and not repo path to the common
+# package for this service.
 import common
 
 log_level = os.environ.get('LOG_LEVEL', 'INFO')
