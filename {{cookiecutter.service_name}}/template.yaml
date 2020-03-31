@@ -293,7 +293,7 @@ Resources:
 {%- if cookiecutter.event_destination == "dynamodb" %}
           - Effect: "Allow"
             Action:
-              - "dynanodb:<<DDB_ACTION>>"
+              - "dynamodb:<<DDB_ACTION>>"
             Resource:
               Fn::GetAtt:
                 - DynamoDBTable
