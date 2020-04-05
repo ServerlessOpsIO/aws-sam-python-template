@@ -6,7 +6,6 @@ verify_ssl = true
 [requires]
 python_version = "3.8"
 
-# FIXME: need to include src.common
 [packages]
 common = {editable = true, path = "src/common"}
 aws-xray-sdk = "*"
