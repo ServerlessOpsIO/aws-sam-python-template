@@ -52,6 +52,7 @@ function:
 	mkdir -p src/handlers/${F}
 	touch src/handlers/${F}/__init__.py
 	touch src/handlers/${F}/function.py
+	mkdir -p tests/{unit,integration}/src/handlers/${F}
 	touch tests/unit/src/handlers/${F}/test_handler.py
 	touch tests/integration/src/handlers/${F}/test_handler.py
 	echo "-e src/common/" > src/handlers/${F}/requirements.txt
