@@ -56,6 +56,7 @@ function:
 	touch tests/unit/src/handlers/${F}/test_handler.py
 	touch tests/integration/src/handlers/${F}/test_handler.py
 	echo "-e src/common/" > src/handlers/${F}/requirements.txt
+	touch events/${F}-{event,msg}.json
 
 unit-test:
 	$(info running unit tests)
