@@ -68,7 +68,7 @@ Option | Description
 `author_email`              |   Author email
 `year`                      |   Year (for copyright)
 `python_version`            |   Python version (ex. 3.8)
-`python_runtime             |   AWS Lambda Python run time (ex. python38)
+`python_runtime`            |   AWS Lambda Python run time (ex. python38)
 `event_source`              |   Select a function event source. (Use `other` to skip configuration)
 `event_destination`         |   Select a function event destination. (Use `other` to skip configuration)
 `dlq_type`                  |   Add a function dead-letter queue or topic. (Use `none` to skip configuration)
