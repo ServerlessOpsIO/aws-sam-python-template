@@ -10,7 +10,6 @@
 ├── Pipfile
 ├── README.md
 ├── events
-│   └── {{cookiecutter.function_name}}-msg.json
 ├── pytest.ini
 ├── src
 │   ├── common
@@ -18,21 +17,21 @@
 │   │   │   └── __init__.py
 │   │   └── setup.py
 │   └── handlers
-│       └── {{cookiecutter.function_name}}
-│           ├── __init__.py
-│           ├── function.py
-│           └── requirements.txt
 ├── template.yaml
 └── tests
     ├── conftest.py
+    ├── integration
+    │   ├── __init__.py
+    │   └── src
+    │       ├── __init__.py
+    │       └── handlers
+    │           └── __init__.py
     └── unit
         ├── __init__.py
         └── src
             ├── __init__.py
             └── handlers
-                ├── __init__.py
-                └── {{cookiecutter.function_name}}
-                    └── test_handler.py
+                └── __init__.py
 ```
 
 ## Requirements
@@ -51,7 +50,7 @@
 **Invoking function locally using a local sample payload**
 
 ```bash
-sam local invoke {{cookiecutter.function_name}} --event events/{{cookiecutter.function_name}}-{{cookiecutter.event_source}}.json
+sam local invoke <FUNCTION_NAME> --event events/<FUNCTION_NAME>-<EVENT_SOURCE>.json
 ```
 
 **Invoking function locally through local API Gateway**
@@ -95,7 +94,7 @@ To simplify troubleshooting, SAM CLI has a command called sam logs. sam logs let
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam logs -n {{cookiecutter.function_name}} --stack-name {{cookiecutter.service_name}} --tail
+sam logs -n <FUNCTION_NAME> --stack-name {{cookiecutter.service_name}} --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).

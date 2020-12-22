@@ -1,20 +1,17 @@
 {
   "service_name": "my-service-name",
   "service_description": "Service Description",
-  "function_name": "MyFunctionName",
-  "function_description": "Function Description",
   "license": [
     "BSD-2-Clause",
     "MIT",
     "MIT-0",
     "other"
   ],
-  "copyright_holder": "ServerlessOps, LLC",
+  "copyright_holder": "",
   "author_name": "",
   "author_email": "",
   "year": "{% now 'utc', '%Y' %}",
   "python_version": "3.8",
-  "python_version_runtime": "python38",
   "event_source": [
     "other",
     "apigateway",
@@ -34,11 +31,6 @@
     "s3",
     "sns",
     "sqs"
-  ],
-  "dlq_type": [
-    "none",
-    "sqs",
-    "sns"
   ],
   "enable_cloudwatch_topic": [
     "no",

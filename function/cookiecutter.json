@@ -1,0 +1,34 @@
+{
+  "function_name": "MyFunctionName",
+  "function_description": "Function Description",
+  "root_dir": ".",
+  "python_version": "3.8",
+  "event_source": [
+    "other",
+    "apigateway",
+    "cloudwatch-event",
+    "cloudwatch-logs",
+    "dynamodb",
+    "kinesis",
+    "s3",
+    "schedule",
+    "sqs",
+    "sns"
+  ],
+  "event_destination": [
+    "other",
+    "dynamodb",
+    "kinesis",
+    "s3",
+    "sns",
+    "sqs"
+  ],
+  "dlq_type": [
+    "none",
+    "sqs",
+    "sns"
+  ],
+  "_extensions": [
+    "jinja2_time.TimeExtension"
+  ]
+}
