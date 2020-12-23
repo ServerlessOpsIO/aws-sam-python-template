@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/sh -x
+
+echo "Copying files from {{cookiecutter.tmp_dir}}"
+
+find . -type f | cpio -pdm ..
 
 echo "Add the following to your template.yml file."
 
@@ -30,7 +34,7 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ssm:GetParameter"
-            Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/${ServiceEnv}/*"
+            Resource: !Sub "arn:aws:ssm:\${AWS::Region}:\${AWS::AccountId}:parameter/\${ServiceName}/\${ServiceEnv}/*"
 {%- if cookiecutter.event_destination != "other" %}
         - Statement:
 {%- if cookiecutter.event_destination == "dynamodb" %}
@@ -179,7 +183,7 @@ Outputs:
       Fn::GetAtt: {{cookiecutter.function_name}}DlqQueue.Arn
     Export:
       Name:
-        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}DlqQueueArn"
+        Fn::Sub: "\${AWS::StackName}-{{cookiecutter.function_name}}DlqQueueArn"
 
   {{cookiecutter.function_name}}DlqQueueName:
     Description: "Name of DLQ"
@@ -187,7 +191,7 @@ Outputs:
       Fn::GetAtt: {{cookiecutter.function_name}}DlqQueue.QueueName
     Export:
       Name:
-        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}DlqQueueName"
+        Fn::Sub: "\${AWS::StackName}-{{cookiecutter.function_name}}DlqQueueName"
 
   {{cookiecutter.function_name}}DlqQueueUrl:
     Description: "Url of DLQ"
@@ -195,7 +199,7 @@ Outputs:
       Ref: {{cookiecutter.function_name}}DlqQueue
     Export:
       Name:
-        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}DlqQueueUrl"
+        Fn::Sub: "\${AWS::StackName}-{{cookiecutter.function_name}}DlqQueueUrl"
 
 {%- elif cookiecutter.dlq_type == "sns" %}
   {{cookiecutter.function_name}}DlqTopicArn:
@@ -204,7 +208,7 @@ Outputs:
       Ref: {{cookiecutter.function_name}}DlqTopic
     Export:
       Name:
-        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}DlqTopicArn"
+        Fn::Sub: "\${AWS::StackName}-{{cookiecutter.function_name}}DlqTopicArn"
 
   {{cookiecutter.function_name}}DlqTopicName:
     Description: "Name of DLQ topic"
@@ -212,9 +216,11 @@ Outputs:
       Fn::GetAtt: {{cookiecutter.function_name}}DlqTopic.TopicName
     Export:
       Name:
-        Fn::Sub: "${AWS::StackName}-{{cookiecutter.function_name}}DlqTopicName"
+        Fn::Sub: "\${AWS::StackName}-{{cookiecutter.function_name}}DlqTopicName"
 {%- endif %}
 {%- endif %}
-
 
 EOF
+
+# FIXME: This don't work.
+rmdir .

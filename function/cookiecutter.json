@@ -1,7 +1,7 @@
 {
   "function_name": "MyFunctionName",
   "function_description": "Function Description",
-  "root_dir": ".",
+  "tmp_dir": "cookiecutter.tmp",
   "python_version": "3.8",
   "event_source": [
     "other",
