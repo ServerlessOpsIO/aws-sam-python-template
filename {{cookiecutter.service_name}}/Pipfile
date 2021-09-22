@@ -12,7 +12,7 @@ aws-xray-sdk = "*"
 
 [dev-packages]
 flake8 = "*"
-moto = "*"
+moto = {extras = ["all"], version = "*"}
 mypy = "*"
 boto3-stubs = { extras = ["dynamodb", "lambda", "kinesis", "s3", "sns", "sqs", "ssm", "xray" ], version = "*"}
 pylint = "*"
