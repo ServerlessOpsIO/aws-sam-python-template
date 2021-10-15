@@ -27,7 +27,7 @@ validate:
 	$(info validating SAM template)
 	@sam validate
 
-deploy: build validate
+deploy: validate build
 	$(info Deploying to personal development stack)
 	sam deploy --stack-name $(STACKNAME) --parameter-overrides Environment=$(ENV) --region ${AWS_REGION}
 
