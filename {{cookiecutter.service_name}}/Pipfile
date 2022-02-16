@@ -4,17 +4,22 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [requires]
-python_version = "3.8"
+python_version = "{{cookiecutter.python_version}}"
 
 [packages]
 common = {editable = true, path = "src/common"}
 aws-xray-sdk = "*"
+aws-lambda-powertools = "*"
 
 [dev-packages]
+cfn-lint = "*"
 flake8 = "*"
-moto = {extras = ["all"], version = "*"}
+genson = "*"
+jsonschema = "*"
+json2python-models = "*"
+#moto = {extras = ["all"], version = "*"}
 mypy = "*"
-boto3-stubs = { extras = ["dynamodb", "lambda", "kinesis", "s3", "sns", "sqs", "ssm", "xray" ], version = "*"}
+#boto3-stubs = { extras = ["all" ], version = "*"}
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
