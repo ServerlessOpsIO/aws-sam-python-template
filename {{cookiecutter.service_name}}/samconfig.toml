@@ -1,10 +1,9 @@
 version = 0.1
-[
-default]
+[default]
 
 [default.deploy]
 
 [default.deploy.parameters]
 stack_name = "{{ cookiecutter.service_name }}-prime"
 confirm_changeset = false
-capabilities = "CAPABILITY_IAM"
+capabilities = "CAPABILITY_NAMED_IAM"
