@@ -64,7 +64,15 @@ venv.bak/
 .settings/
 .project
 .pydevproject
+.vscode/
+*.code-workspace
 
-# Cruft
+# Mac Cruft
 .DS_Store
 
+# Deploy
+codepipeline-config-*.yaml
+
+
+# AWS SAM
+.aws-sam/
