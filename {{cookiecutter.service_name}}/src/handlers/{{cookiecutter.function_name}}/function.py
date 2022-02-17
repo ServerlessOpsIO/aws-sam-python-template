@@ -1,39 +1,48 @@
 '''{{cookiecutter.function_description}}'''
 import json
-import logging
-import os
+from dataclasses import dataclass
 
-# AWS X-RAY
-from aws_xray_sdk.core import xray_recorder
-from aws_xray_sdk.core import patch_all
-# Only instrument libraries if not running locally
-if "AWS_SAM_LOCAL" not in os.environ:
-    patch_all()
+from aws_lambda_powertools.logging import Logger
+from aws_lambda_powertools.utilities.typing import LambdaContext
+
+from common.util.dataclasses import lambda_dataclass_response
 
 
-# This path reflects the packaged path and not repo path to the common
-# package for this service.
-import common   # pylint: disable=unused-import
+LOGGER = Logger(utc=True)
 
-log_level = os.environ.get('LOG_LEVEL', 'INFO')
-logging.root.setLevel(logging.getLevelName(log_level))
-_logger = logging.getLogger(__name__)
 
-def handler(event, context):
-    '''Function entry'''
-    _logger.debug('Event: {}'.format(json.dumps(event)))
-
+@dataclass
+class Response:
+    '''Function response'''
 {% if cookiecutter.event_source == "apigateway" %}
-    resp = {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world",
-        }),
-    }
+    statusCode: int
+    body: str
 {% else %}
-    resp = {}
+    pass
 {% endif %}
 
-    _logger.debug('Response: {}'.format(json.dumps(resp)))
-    return resp
+
+@LOGGER.inject_lambda_context
+@lambda_dataclass_response
+def handler(event: Dict[str, Any], context: LambdaContext) -> Response:
+    '''Function entry'''
+    LOGGER.debug('Event', extra={"message_object": event})
+
+{% if cookiecutter.event_source == "apigateway" %}
+    response = Response(
+        **{
+            "statusCode": 200,
+            "body": json.dumps(
+                {
+                    "message": "hello world",
+                }
+            ),
+        }
+    )
+{% else %}
+    response = Response(**{})
+{% endif %}
+
+    LOGGER.debug('Response', extra={"message_object": resp})
+    return response
 
