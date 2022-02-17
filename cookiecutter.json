@@ -41,8 +41,8 @@
     "sns"
   ],
   "enable_cloudwatch_topic": [
-    "no",
-    "yes"
+    "yes",
+    "no"
   ],
   "_extensions": [
     "jinja2_time.TimeExtension"
