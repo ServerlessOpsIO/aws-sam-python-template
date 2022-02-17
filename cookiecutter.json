@@ -13,8 +13,8 @@
   "author_name": "",
   "author_email": "",
   "year": "{% now 'utc', '%Y' %}",
-  "python_version": "3.8",
-  "python_version_runtime": "python38",
+  "python_version": "3.9",
+  "python_version_runtime": "python39",
   "event_source": [
     "other",
     "apigateway",
