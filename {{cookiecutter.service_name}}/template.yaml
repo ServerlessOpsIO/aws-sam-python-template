@@ -24,9 +24,10 @@ Parameters:
       - 'ERROR'
       - 'CRITICAL'
 
-  XRaySDKEnabled:
+  # FIXME: integrate this into function.
+  XRayTracingEnabled:
     Type: String
-    Description: "AWS X-RAY SDK enabled"
+    Description: "AWS X-RAY tracing enabled"
     Default: 'Disabled'
     AllowedValues:
       - 'Enabled'
@@ -237,7 +238,7 @@ Parameters:
 {%- endif %}
 
 Mappings:
-  XRaySDKEnabled:
+  XRayTracingEnabled:
     Enabled:
       Enabled: "true"
     Disabled:
@@ -249,10 +250,11 @@ Globals:
       Variables:
         LOG_LEVEL:
           Ref: LogLevel
-        AWS_XRAY_SDK_ENABLED:
+        POWERTOOLS_SERVICE_NAME: !Ref AWS::StackName
+        XRAY_TRACING_ENABLED:
           Fn::FindInMap:
-            - XRaySDKEnabled
-            - Ref: XRaySDKEnabled
+            - XRayTracingEnabled
+            - Ref: XRayTracingEnabled
             - Enabled
     Tags:
       ServiceName: !Ref ServiceName
