@@ -16,6 +16,10 @@ setup(
     keywords="{{cookiecutter.service_name}} Service",
     python_requires='>={{cookiecutter.python_version}}.*',
     include_package_data=True,
+    install_requires=[
+        'aws_lambda_powertools',
+        'boto3'
+    ],
     classifiers=[
         'Environment :: Console',
         'Environment :: Other Environment',
