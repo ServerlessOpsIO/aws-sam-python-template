@@ -9,7 +9,7 @@
     "MIT-0",
     "other"
   ],
-  "copyright_holder": "ServerlessOps, LLC",
+  "copyright_holder": "",
   "author_name": "",
   "author_email": "",
   "year": "{% now 'utc', '%Y' %}",
