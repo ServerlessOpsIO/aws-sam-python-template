@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: {{ cookiecutter.python_version }}
+    commands:
+      - pip install --upgrade pip
+      - pip install pipenv
+      - pipenv install --dev
+  build:
+    commands:
+      # trigger the unit tests here
+      - echo 'Running unit tests'
+      - pipenv run make validate
+      #- mkdir tests/assets
+      #- aws s3 sync --no-progress s3://${TEST_ASSET_BUCKET_PATH} tests/assets
+      - pipenv run make unit-test
+

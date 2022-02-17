@@ -8,9 +8,15 @@ dev: flake lint test
 # Verifications to run before sending a pull request
 pr: init dev
 
+SAM_TEMPLATE ?= template.yaml
 ENV ?= ${USER}
-STACKNAME = $(shell basename ${CURDIR})-$(ENV)
+APPNAME ?= $(shell basename ${CURDIR})
+STACKNAME = $(APPNAME)-$(ENV)
 AWS_REGION ?= $(shell aws configure get region)
+PIPELINE_STACKNAME = $(APPNAME)-pipeline-$(ENV)
+PIPELINE_CONFIG_FILE ?= codepipeline-config-$(ENV).yaml
+REPO_ID ?= ServerlessOpsIO/PhotoOps
+BRANCH ?= 'master'
 
 check_profile:
 	# Make sure we have a user-scoped credentials profile set. We don't want to be accidentally using the default profile
@@ -18,7 +24,7 @@ check_profile:
 
 build:
 	$(info Building application)
-	sam build
+	sam build --use-container --parallel --template ${SAM_TEMPLATE}
 
 validate:
 	$(info linting SAM template)
@@ -29,7 +35,40 @@ validate:
 
 deploy: validate build
 	$(info Deploying to personal development stack)
-	sam deploy --stack-name $(STACKNAME) --parameter-overrides Environment=$(ENV) --region ${AWS_REGION}
+	sam deploy \
+		--region ${AWS_REGION} \
+		--resolve-s3 \
+		--stack-name $(STACKNAME) \
+		--tags \
+			ServiceName=$(APPNAME) \
+			ServiceEnv=$(ENV) \
+			StackName=$(STACKNAME) \
+		--parameter-overrides \
+			ServiceName=$(APPNAME) \
+			ServiceEnv=$(ENV)
+
+
+# Requires usage of PipelineUser IAM user.
+deploy-pipeline:
+	$(info Deploying to personal development stack)
+	sam deploy \
+		--region ${AWS_REGION} \
+		--resolve-s3 \
+		--template codepipeline.yaml \
+		--stack-name $(PIPELINE_STACKNAME) \
+		--tags \
+			ServiceName=$(APPNAME) \
+			ServiceEnv=$(ENV) \
+			StackName=$(PIPELINE_STACKNAME) \
+			PipelineStack=true \
+		--parameter-overrides \
+			ServiceName=$(APPNAME) \
+			FullRepositoryId=$(REPO_ID) \
+			GitBranch=$(BRANCH)
+
+generate-codepipeline-cfn-config:
+	$(info generating configurations for CloudFormation deploy)
+	echo '{ "Tags": {"ServiceName":"$(APPNAME)", "ServiceEnv":"$(ENV)", "StackName":"$(STACKNAME)"} }' > $(PIPELINE_CONFIG_FILE)
 
 describe:
 	$(info Describing stack)

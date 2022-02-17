@@ -1,0 +1,15 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: {{ cookiecutter.python_version }}
+    commands:
+      - pip install --upgrade pip
+      - pip install pipenv
+      - pipenv install --dev
+  build:
+    commands:
+      # trigger the integration tests here
+      - echo 'Running integration tests'
+      - . ./pipeline/assume-role.sh ${CROSS_ACCOUNT_ROLE} ${STACK_NAME}-IntegrationTests
+      - pipenv run make integ-test

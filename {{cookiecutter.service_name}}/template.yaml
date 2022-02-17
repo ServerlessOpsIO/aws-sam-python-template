@@ -256,9 +256,6 @@ Globals:
             - XRayTracingEnabled
             - Ref: XRayTracingEnabled
             - Enabled
-    Tags:
-      ServiceName: !Ref ServiceName
-      ServiceEnv: !Ref ServiceEnv
     Tracing: !Ref XRayTracingMode
 
 

@@ -1,0 +1,27 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: {{ cookiecutter.python_version }}
+    commands:
+      - pip install --upgrade pip
+      - pip install --upgrade awscli aws-sam-cli
+      # Enable docker https://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker-custom-image.html
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  build:
+    commands:
+      - make build
+      - ENV=${GIT_BRANCH} APPNAME=${APPNAME} PIPELINE_CONFIG_FILE=codepipeline-config-feature.yaml make generate-codepipeline-cfn-config
+      - ENV=${DEV_ENV} APPNAME=${APPNAME} PIPELINE_CONFIG_FILE=codepipeline-config-dev.yaml make generate-codepipeline-cfn-config
+      - ENV=${PROD_ENV} APPNAME=${APPNAME} PIPELINE_CONFIG_FILE=codepipeline-config-prod.yaml make generate-codepipeline-cfn-config
+      - sam package --s3-bucket ${BUILD_ARTIFACT_BUCKET}
+                    --s3-prefix ${BUILD_ARTIFACT_PREFIX_PATH}
+                    --region ${REGION}
+                    --kms-key-id ${BUILD_ARTIFACT_KMS_KEY}
+                    --output-template-file packaged.yaml
+artifacts:
+  files:
+    - codepipeline-config-*.yaml
+    - packaged.yaml
+    - pipeline/*
