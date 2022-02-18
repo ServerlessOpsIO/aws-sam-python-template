@@ -115,6 +115,6 @@ python -m pytest tests/ -v
 In order to delete our Serverless Application recently deployed you can use the following AWS CLI Command:
 
 ```bash
-aws cloudformation delete-stack --stack-name {{cookiecutter.service_name}}
+make delete
 ```
 
