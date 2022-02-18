@@ -1,2 +1,1 @@
-# This must be specified from the root of the project for SAM
--e src/common/
+# `common` module will be packaged via Lambda layer.

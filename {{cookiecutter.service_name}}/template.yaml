@@ -260,6 +260,20 @@ Globals:
 
 
 Resources:
+  # NOTE We use a layer for the `common`` module because of issues getting
+  # the source path included in SAM Docker builds.
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub "${AWS::StackName}-${ServiceEnv}-CommonLayer"
+      ContentUri: src/common
+      RetentionPolicy: Delete
+      CompatibleRuntimes:
+        - python{{ cookiecutter.python_version }}
+    Metadata:
+      BuildMethod: makefile
+
+
   {{cookiecutter.function_name}}:
     Type: AWS::Serverless::Function
     Properties:
@@ -269,6 +283,8 @@ Resources:
       Runtime: python{{ cookiecutter.python_version }}
       MemorySize: 128
       Timeout: 3
+      Layers:
+        - !Ref CommonLayer
 {%- if cookiecutter.dlq_type != "none" %}
       DeadLetterQueue:
 {%- if cookiecutter.dlq_type == "sqs" %}
