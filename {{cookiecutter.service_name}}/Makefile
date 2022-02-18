@@ -15,7 +15,7 @@ STACKNAME = $(APPNAME)-$(ENV)
 AWS_REGION ?= $(shell aws configure get region)
 PIPELINE_STACKNAME = $(APPNAME)-pipeline-$(ENV)
 PIPELINE_CONFIG_FILE ?= codepipeline-config-$(ENV).yaml
-REPO_ID ?= ServerlessOpsIO/PhotoOps
+REPO_ID ?= ServerlessOpsIO/{{cookiecutter.service_name}}
 BRANCH ?= 'master'
 
 check_profile:
