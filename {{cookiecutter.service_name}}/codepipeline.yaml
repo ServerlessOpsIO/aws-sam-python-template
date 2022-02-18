@@ -85,6 +85,9 @@ Parameters:
   CodeStarConnectionArn:
     Type: AWS::SSM::Parameter::Value<String>
     Default: "/codepipeline-build-prime/CodeStarConnectionArn"
+  NotificationsTargetArn:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: "/serverlessops-slack-chatbot-prime/BuildDeploySlackBotArn"
   ### Uncomment here and in CodeBuildServiceRole if there are test assets.
   #TestAssetBucketPath:
   #  Type: AWS::SSM::Parameter::Value<String>
@@ -96,6 +99,35 @@ Conditions:
   IsFeatureBranchPipeline: !Not [Condition: IsMainBranchPipeline]
 
 Resources:
+  Notifications:
+    Type: 'AWS::CodeStarNotifications::NotificationRule'
+    Properties:
+      Name: !Sub 'Pipeline ${AWS::StackName}'
+      DetailType: FULL
+      Resource: !Sub 'arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${Pipeline}'
+      EventTypeIds:
+        - codepipeline-pipeline-action-execution-started
+        - codepipeline-pipeline-action-execution-succeeded
+        - codepipeline-pipeline-action-execution-failed
+        - codepipeline-pipeline-action-execution-canceled
+        - codepipeline-pipeline-stage-execution-started
+        - codepipeline-pipeline-stage-execution-succeeded
+        - codepipeline-pipeline-stage-execution-failed
+        - codepipeline-pipeline-stage-execution-resumed
+        - codepipeline-pipeline-stage-execution-canceled
+        - codepipeline-pipeline-pipeline-execution-started
+        - codepipeline-pipeline-pipeline-execution-succeeded
+        - codepipeline-pipeline-pipeline-execution-failed
+        - codepipeline-pipeline-pipeline-execution-resumed
+        - codepipeline-pipeline-pipeline-execution-superseded
+        - codepipeline-pipeline-pipeline-execution-canceled
+        - codepipeline-pipeline-manual-approval-needed
+        - codepipeline-pipeline-manual-approval-succeeded
+        - codepipeline-pipeline-manual-approval-failed
+      Targets:
+        - TargetType: AWSChatbotSlack
+          TargetAddress: !Ref NotificationsTargetArn
+
   #  ____  _            _ _
   # |  _ \(_)_ __   ___| (_)_ __   ___
   # | |_) | | '_ \ / _ | | | '_ \ / _ \
