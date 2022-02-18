@@ -88,10 +88,6 @@ Parameters:
   NotificationsTargetArn:
     Type: AWS::SSM::Parameter::Value<String>
     Default: "/serverlessops-slack-chatbot-prime/BuildDeploySlackBotArn"
-  ### Uncomment here and in CodeBuildServiceRole if there are test assets.
-  #TestAssetBucketPath:
-  #  Type: AWS::SSM::Parameter::Value<String>
-  #  Default: "/{{cookiecutter.service_name}}-TestAssets-prime/BucketPath"
 
 
 Conditions:
@@ -514,21 +510,6 @@ Resources:
       ManagedPolicyArns:
         - !Ref CodeBuildServicePolicy
         - 'arn:aws:iam::aws:policy/service-role/AWSLambdaRole'    # Invoke Lambda functions
-      ### Uncomment if there is a test assets bucket
-      #Policies:
-      #  - PolicyName: TestImages
-      #    PolicyDocument:
-      #      Version: "2012-10-17"
-      #      Statement:
-      #        - Effect: Allow
-      #          Action:
-      #            - "s3:GetObject"
-      #            - "s3:GetObjectVersion"
-      #            - "s3:PutObject"
-      #            - "s3:List*"
-      #          Resource:
-      #            - !Join ['', ["arn:aws:s3:::", !Select [0, !Split ['/', !Ref TestAssetBucketPath]]]]
-      #            - !Sub "arn:aws:s3:::${TestAssetBucketPath}/*"
 
 
   CodeBuildProjectUnitTest:
@@ -540,9 +521,6 @@ Resources:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_MEDIUM
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
-        EnvironmentVariables:
-          - Name: TEST_ASSET_BUCKET_PATH
-            Value: !Ref TestAssetBucketPath
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
