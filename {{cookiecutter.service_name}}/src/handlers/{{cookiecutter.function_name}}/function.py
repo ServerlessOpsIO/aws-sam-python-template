@@ -29,20 +29,19 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Response:
     LOGGER.debug('Event', extra={"message_object": event})
 
 {% if cookiecutter.event_source == "apigateway" %}
-    response = Response(
-        **{
-            "statusCode": 200,
-            "body": json.dumps(
-                {
-                    "message": "hello world",
-                }
-            ),
-        }
-    )
+    response = {
+        "statusCode": 200,
+        "body": json.dumps(
+            {
+                "message": "hello world",
+            }
+        ),
+    }
+
 {% else %}
-    response = Response(**{})
+    response = {}
 {% endif %}
 
-    LOGGER.debug('Response', extra={"message_object": resp})
-    return response
+    LOGGER.debug('Reponse', extra={"message_object": response})
+    return Response(**response)
 
