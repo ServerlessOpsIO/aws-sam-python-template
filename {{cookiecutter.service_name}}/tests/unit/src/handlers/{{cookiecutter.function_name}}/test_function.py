@@ -8,7 +8,12 @@ import pytest
 
 from common.test.aws import create_lambda_function_context
 #from aws_lambda_powertools.utilities.data_classes import <AWS_EVENT>
-from src.handlers.{{cookiecutter.function_name}}.function as func
+
+# NOTE: Don't break all of pytest because of a single problem function
+try:
+    import src.handlers.{{cookiecutter.function_name}}.function as func
+except:
+    pytestmark = pytest.mark.skip
 
 FUNCTION_NAME = '{{cookiecutter.function_name}}'
 
