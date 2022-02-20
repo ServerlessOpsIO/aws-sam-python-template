@@ -29,7 +29,9 @@ tox = "*"
 
 [scripts]
 #install-lambda-functions = "pipenv install -r src/requirements.txt"
-test = "pytest --cov src --cov-report term-missing --cov-fail-under 95 tests/unit"
+test = "pytest -vv --cov src --cov-report term-missing --cov-fail-under 95 tests"
+unit-test = "pytest -vv --cov src --cov-report term-missing --cov-fail-under 95 tests/unit"
+integ-test = "pytest -vv --cov src --cov-report term-missing --cov-fail-under 95 tests/integration"
 flake8 = "flake8"
 lint = "pylint"
 
