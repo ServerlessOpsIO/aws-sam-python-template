@@ -4,35 +4,6 @@
 
 
 ```bash
-.
-├── LICENSE
-├── Makefile
-├── Pipfile
-├── README.md
-├── events
-│   └── {{cookiecutter.function_name}}-msg.json
-├── pytest.ini
-├── src
-│   ├── common
-│   │   ├── common
-│   │   │   └── __init__.py
-│   │   └── setup.py
-│   └── handlers
-│       └── {{cookiecutter.function_name}}
-│           ├── __init__.py
-│           ├── function.py
-│           └── requirements.txt
-├── template.yaml
-└── tests
-    ├── conftest.py
-    └── unit
-        ├── __init__.py
-        └── src
-            ├── __init__.py
-            └── handlers
-                ├── __init__.py
-                └── {{cookiecutter.function_name}}
-                    └── test_handler.py
 ```
 
 ## Requirements
