@@ -68,6 +68,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 {%- elif cookiecutter.license == "other" -%}
-{{cookiecutter.license_other_text}}
 
 {% endif %}
