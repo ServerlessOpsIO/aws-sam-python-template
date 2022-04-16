@@ -2,7 +2,7 @@
 
 # Create file treee
 sed -i.bak '/```bash/r'<(tree ./ -a -I .git) README.md
-rm README.bak
+rm README.md.bak
 
 # Initialize project
 make init
