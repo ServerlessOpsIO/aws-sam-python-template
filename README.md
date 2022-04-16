@@ -51,7 +51,7 @@ abbreviations:
 Create a new project by running the command below. This will ask you a series of questions and customize the generated project based on your answers.
 
 ```
-$ sam init --location gh:serverlessops/aws-sam-python-template
+$ sam init --location gh:serverlessopsio/aws-sam-python-template
 ```
 
 ## Options
